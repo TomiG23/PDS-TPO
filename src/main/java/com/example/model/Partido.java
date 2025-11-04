@@ -3,7 +3,7 @@ package com.example.model;
 import com.example.model.State.EstadoPartido;
 import com.example.model.State.NecesitamosJugadores;
 
-Featurimport lombok.Getter;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "estado")
-@EqualsAndHashCode(onlyExplicitlyIncluded = false)
+@EqualsAndHashCode
 public class Partido {
     private Deporte deporte;
     private Jugador organizador;
