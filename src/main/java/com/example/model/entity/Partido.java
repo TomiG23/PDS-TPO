@@ -2,7 +2,6 @@ package com.example.model.entity;
 
 package com.example.model;
 
-import com.example.model.State.EstadoPartido;
 import com.example.model.State.NecesitamosJugadores;
 
 import lombok.Getter;

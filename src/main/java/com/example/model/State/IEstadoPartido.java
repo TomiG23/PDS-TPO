@@ -1,9 +1,6 @@
 package com.example.model.State;
 
-/**
- * Interfaz EstadoPartido con los métodos requeridos.
- */
-public interface EstadoPartido {
+public interface IEstadoPartido {
     void agregarJugadorAPartido(Partido partido);
     void confirmarPartido(Partido partido);
     void iniciarPartido(Partido partido);
@@ -12,4 +9,3 @@ public interface EstadoPartido {
     void concluirConErrores(Partido partido);
     String getNombreEstado();
 }
-
