@@ -1,9 +1,9 @@
 package com.example.model.entity;
 
-package com.example.model;
-
+import com.example.model.State.IEstadoPartido;
 import com.example.model.State.NecesitamosJugadores;
 
+import com.example.model.strategy.tipoNivel.ITipoNivel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -33,10 +33,10 @@ public class Partido {
     private LocalDateTime duracionEncuentro; // DateTime
     private Zona ubicacion;
     private LocalDateTime horario; // DateTime
-    private TipoNivel tipoNivel;
-    private EstadoPartido estado;
-    private TipoNivel minNivel;
-    private TipoNivel maxNivel;
+    private ITipoNivel tipoNivel;
+    private IEstadoPartido estado;
+    private ITipoNivel minNivel;
+    private ITipoNivel maxNivel;
 
     /**
      * Constructor principal. Establece el estado inicial en NecesitamosJugadores.
@@ -75,12 +75,12 @@ public class Partido {
     }
 
     // Métodos de gestión del estado
-    public void setEstado(EstadoPartido estado) {
+    public void setEstado(IEstadoPartido estado) {
         System.out.println("[Partido] Transición de estado: " + (this.estado != null ? this.estado.getNombreEstado() : "<none>") + " -> " + (estado != null ? estado.getNombreEstado() : "<none>"));
         this.estado = estado;
     }
 
-    public EstadoPartido getEstado() {
+    public IEstadoPartido getEstado() {
         return this.estado;
     }
 
