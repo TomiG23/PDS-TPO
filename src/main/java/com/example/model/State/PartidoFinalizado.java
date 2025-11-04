@@ -1,7 +1,5 @@
 package com.example.model.State;
 
-import com.example.model.Partido;
-
 public class PartidoFinalizado implements EstadoPartido {
     @Override
     public void agregarJugadorAPartido(Partido partido) {

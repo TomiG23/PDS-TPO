@@ -1,3 +1,5 @@
+package com.example.model.entity;
+
 package com.example.model;
 
 import com.example.model.State.EstadoPartido;

@@ -1,7 +1,5 @@
 package com.example.model.State;
 
-import com.example.model.Partido;
-
 /**
  * Interfaz EstadoPartido con los métodos requeridos.
  */
