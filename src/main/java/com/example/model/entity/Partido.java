@@ -4,6 +4,8 @@ import com.example.model.State.IEstadoPartido;
 import com.example.model.State.NecesitamosJugadores;
 
 import com.example.model.strategy.tipoNivel.ITipoNivel;
+import com.example.notification.observer.INotificationObserver;
+import com.example.notification.observer.PartidoEvents;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -38,6 +40,7 @@ public class Partido {
     private ITipoNivel minNivel;
     private ITipoNivel maxNivel;
     private boolean terminadoConErrores;
+    private final List<INotificationObserver> observers = new ArrayList<>();
 
     /**
      * Constructor principal. Establece el estado inicial en NecesitamosJugadores.
@@ -79,6 +82,8 @@ public class Partido {
     public void setEstado(IEstadoPartido estado) {
         System.out.println("[Partido] Transición de estado: " + (this.estado != null ? this.estado.getNombreEstado() : "<none>") + " -> " + (estado != null ? estado.getNombreEstado() : "<none>"));
         this.estado = estado;
+        String event = mapEstadoToEvent(estado);
+        if (event != null) notifyObservers(event);
     }
 
     public IEstadoPartido getEstado() {
@@ -90,5 +95,40 @@ public class Partido {
         String nombre = (estado != null) ? estado.getNombreEstado() : "SinEstado";
         System.out.println("Estado actual del partido: " + nombre);
         return nombre;
+    }
+
+    // Observer API
+    public void addObserver(INotificationObserver observer) {
+        if (observer != null && !observers.contains(observer)) observers.add(observer);
+    }
+
+    public void removeObserver(INotificationObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers(String event) {
+        for (INotificationObserver obs : observers) {
+            try {
+                obs.onPartidoEvent(event, this);
+            } catch (Exception e) {
+                System.out.println("[Partido] Error notificando observer: " + e.getMessage());
+            }
+        }
+    }
+
+    private String mapEstadoToEvent(IEstadoPartido est) {
+        if (est == null) return null;
+        String n = est.getNombreEstado();
+        if ("PartidoArmado".equals(n)) return PartidoEvents.PARTIDO_ARMADO;
+        if ("PartidoConfirmado".equals(n)) return PartidoEvents.PARTIDO_CONFIRMADO;
+        if ("PartidoEnJuego".equals(n)) return PartidoEvents.PARTIDO_EN_JUEGO;
+        if ("PartidoFinalizado".equals(n)) return PartidoEvents.PARTIDO_FINALIZADO;
+        if ("PartidoCancelado".equals(n)) return PartidoEvents.PARTIDO_CANCELADO;
+        return null;
+    }
+
+    // Disparar evento de creación manualmente tras construir y suscribir observers
+    public void publicarCreacion() {
+        notifyObservers(PartidoEvents.PARTIDO_CREADO);
     }
 }
