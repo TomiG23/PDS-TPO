@@ -37,6 +37,7 @@ public class Partido {
     private IEstadoPartido estado;
     private ITipoNivel minNivel;
     private ITipoNivel maxNivel;
+    private boolean terminadoConErrores;
 
     /**
      * Constructor principal. Establece el estado inicial en NecesitamosJugadores.

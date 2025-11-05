@@ -1,6 +1,8 @@
 package com.example.model.State;
 
-public class PartidoFinalizado implements EstadoPartido {
+import com.example.model.entity.Partido;
+
+public class PartidoFinalizado implements IEstadoPartido {
     @Override
     public void agregarJugadorAPartido(Partido partido) {
         System.out.println("[PartidoFinalizado] No se pueden agregar jugadores: el partido ya finalizó.");
@@ -37,4 +39,5 @@ public class PartidoFinalizado implements EstadoPartido {
         return "PartidoFinalizado";
     }
 }
+
 

@@ -1,6 +1,8 @@
 package com.example.model.State;
 
-public class PartidoCancelado implements EstadoPartido {
+import com.example.model.entity.Partido;
+
+public class PartidoCancelado implements IEstadoPartido {
     @Override
     public void agregarJugadorAPartido(Partido partido) {
         System.out.println("[PartidoCancelado] No se puede agregar jugadores: el partido está cancelado.");
@@ -30,7 +32,7 @@ public class PartidoCancelado implements EstadoPartido {
     public void concluirConErrores(Partido partido) {
         System.out.println("[PartidoCancelado] Concluir con errores desde partido cancelado.");
         partido.setTerminadoConErrores(true);
-        partido.setEstadoActual(new PartidoFinalizado());
+        partido.setEstado(new PartidoFinalizado());
     }
 
     @Override
@@ -38,4 +40,5 @@ public class PartidoCancelado implements EstadoPartido {
         return "PartidoCancelado";
     }
 }
+
 

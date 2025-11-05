@@ -1,5 +1,7 @@
 package com.example.model.State;
 
+import com.example.model.entity.Partido;
+
 public interface IEstadoPartido {
     void agregarJugadorAPartido(Partido partido);
     void confirmarPartido(Partido partido);

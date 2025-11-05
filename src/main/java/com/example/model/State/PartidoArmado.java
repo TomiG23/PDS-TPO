@@ -1,6 +1,8 @@
 package com.example.model.State;
 
-public class PartidoArmado implements EstadoPartido {
+import com.example.model.entity.Partido;
+
+public class PartidoArmado implements IEstadoPartido {
     @Override
     public void agregarJugadorAPartido(Partido partido) {
         System.out.println("[PartidoArmado] Se puede seguir agregando jugadores. Estado permanece PartidoArmado.");
@@ -9,7 +11,7 @@ public class PartidoArmado implements EstadoPartido {
     @Override
     public void confirmarPartido(Partido partido) {
         System.out.println("[PartidoArmado] Confirmando partido...");
-        partido.setEstadoActual(new PartidoConfirmado());
+        partido.setEstado(new PartidoConfirmado());
     }
 
     @Override
@@ -25,14 +27,14 @@ public class PartidoArmado implements EstadoPartido {
     @Override
     public void cancelarPartido(Partido partido) {
         System.out.println("[PartidoArmado] Partido cancelado desde PartidoArmado.");
-        partido.setEstadoActual(new PartidoCancelado());
+        partido.setEstado(new PartidoCancelado());
     }
 
     @Override
     public void concluirConErrores(Partido partido) {
         System.out.println("[PartidoArmado] Concluye con errores.");
         partido.setTerminadoConErrores(true);
-        partido.setEstadoActual(new PartidoFinalizado());
+        partido.setEstado(new PartidoFinalizado());
     }
 
     @Override

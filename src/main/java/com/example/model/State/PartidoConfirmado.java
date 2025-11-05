@@ -1,6 +1,8 @@
 package com.example.model.State;
 
-public class PartidoConfirmado implements EstadoPartido {
+import com.example.model.entity.Partido;
+
+public class PartidoConfirmado implements IEstadoPartido {
     @Override
     public void agregarJugadorAPartido(Partido partido) {
         System.out.println("[PartidoConfirmado] No se recomienda agregar jugadores después de la confirmación, pero es posible.");
@@ -14,7 +16,7 @@ public class PartidoConfirmado implements EstadoPartido {
     @Override
     public void iniciarPartido(Partido partido) {
         System.out.println("[PartidoConfirmado] Iniciando partido...");
-        partido.setEstadoActual(new PartidoEnJuego());
+        partido.setEstado(new PartidoEnJuego());
     }
 
     @Override
@@ -25,14 +27,14 @@ public class PartidoConfirmado implements EstadoPartido {
     @Override
     public void cancelarPartido(Partido partido) {
         System.out.println("[PartidoConfirmado] Partido cancelado desde PartidoConfirmado.");
-        partido.setEstadoActual(new PartidoCancelado());
+        partido.setEstado(new PartidoCancelado());
     }
 
     @Override
     public void concluirConErrores(Partido partido) {
         System.out.println("[PartidoConfirmado] Concluye con errores.");
         partido.setTerminadoConErrores(true);
-        partido.setEstadoActual(new PartidoFinalizado());
+        partido.setEstado(new PartidoFinalizado());
     }
 
     @Override
@@ -40,4 +42,5 @@ public class PartidoConfirmado implements EstadoPartido {
         return "PartidoConfirmado";
     }
 }
+
 
