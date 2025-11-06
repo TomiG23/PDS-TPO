@@ -11,9 +11,12 @@ import com.example.notification.service.UserDirectory;
 import com.example.notification.strategy.EmailNotificationStrategy;
 import com.example.notification.strategy.NotificationStrategy;
 import com.example.notification.strategy.PushNotificationStrategy;
+import com.example.view.MenuAcceso;
+import com.example.view.MenuAcciones;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main{
     public static void main(String[] args) {
@@ -68,6 +71,15 @@ public class Main{
         partido.finalizar();
 
         System.out.println("==== FIN DEMO ====");
+        Scanner scanner = new Scanner(System.in);
+        MenuAcceso menu = new MenuAcceso(scanner);
+        menu.mostrarMenu(scanner);
+
+        System.out.println("\nBienvenido {Usuario}\n");
+
+        MenuAcciones menuAcciones = new MenuAcciones(scanner);
+        menuAcciones.mostrarMenu();
+        scanner.close();
     }
 }
 
