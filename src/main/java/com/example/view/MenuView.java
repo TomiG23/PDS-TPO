@@ -62,7 +62,8 @@ public class MenuView extends View {
                 System.out.println("\n======");
                 menuAcceso.mostrarMenu();
             } else {
-                System.out.println("\n=== Menú Principal === " + sesion.getUsuarioActual().getNombre());
+                usuarioActual = sesion.getUsuarioActual();
+                System.out.println("\n=== Menú Principal === " + usuarioActual.getNombre());
                 mostrarOpcipnes(List.of("Cerrar sesion", "Crear partido", "Buscar partidos", "Agregar habilidad"));
                 String opcion = seleccionarOpcion();
                 switch (opcion) {
@@ -96,12 +97,12 @@ public class MenuView extends View {
         if (!verificarSesion()) return;
         System.out.println("\n--- Crear partido ---");
         System.out.print("Deporte (ej. Futbol, Basquet): ");
-        String depName = scanner.nextLine().trim();
+        String depName = scanner.next().trim();
         Deporte deporte = new Deporte(depName);
         int jugadoresRequeridos = leerEntero("Cantidad de jugadores requeridos: ");
         Partido partido = gestor.crearPartido(usuarioActual, deporte, jugadoresRequeridos);
         System.out.print("Zona del encuentro: ");
-        String zoneName = scanner.nextLine().trim();
+        String zoneName = scanner.next().trim();
         partido.setUbicacion(new Zona(zoneName));
         System.out.println("Configuración de niveles. Ingrese un valor entre 1 (Principiante) y 3 (Avanzado) o 0 para omitir.");
         System.out.print("Nivel mínimo permitido: ");
@@ -129,7 +130,7 @@ public class MenuView extends View {
         System.out.println("3. Por historial");
         System.out.println("4. Sin filtro");
         System.out.print("Opción: ");
-        String op = scanner.nextLine().trim();
+        String op = scanner.next().trim();
         switch (op) {
             case "1" -> {
                 // Obtener zonas únicas de los partidos disponibles
