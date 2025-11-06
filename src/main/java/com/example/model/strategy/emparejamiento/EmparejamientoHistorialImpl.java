@@ -4,23 +4,18 @@ import com.example.model.entity.Jugador;
 import com.example.model.entity.Partido;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.example.model.entity.Historial;
 
 public class EmparejamientoHistorialImpl implements IEmparejamientoEstrategia {
     @Override
     public List<Partido> emparejar(List<Partido> partidos, Jugador jugador) {
         List<Partido> out = new ArrayList<>();
         if (partidos == null || jugador == null) return out;
-
-        // Suponemos que Historial expone pares de jugadores que ya jugaron juntos.
-        // Como la clase está vacía, aquí hacemos una lógica de ejemplo:
-        // Si el organizador o algún jugador del partido tiene el mismo nombre que alguien con quien el jugador ya jugó,
-        // consideramos que hay match por historial.
-
-        Set<String> conocidos = knownPlayersFromHistorial(jugador);
-
+        // Obtenemos del historial los nombres de los jugadores con los que ya compartió un encuentro.
+        Set<String> conocidos = Historial.getInstance().getNombresConocidos(jugador);
         for (Partido p : partidos) {
             Jugador org = p.getOrganizador();
             boolean match = false;
@@ -33,10 +28,5 @@ public class EmparejamientoHistorialImpl implements IEmparejamientoEstrategia {
             if (match) out.add(p);
         }
         return out;
-    }
-
-    private Set<String> knownPlayersFromHistorial(Jugador jugador) {
-        // Placeholder: sin datos reales, devolvemos set vacío.
-        return new HashSet<>();
     }
 }

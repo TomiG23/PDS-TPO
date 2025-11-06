@@ -33,7 +33,7 @@ public class Partido {
     private List<Jugador> jugadores = new ArrayList<>();
     private int jugadoresRequeridos;
     private LocalDateTime duracionEncuentro; // DateTime
-    private Ubicacion ubicacion;
+    private Zona ubicacion;
     private LocalDateTime horario; // DateTime
     private ITipoNivel tipoNivel;
     private IEstadoPartido estado;
@@ -45,10 +45,9 @@ public class Partido {
     /**
      * Constructor principal. Establece el estado inicial en NecesitamosJugadores.
      */
-    public Partido(Jugador organizador, Deporte deporte, int jugadoresRequeridos, Ubicacion ubicacion) {
+    public Partido(Jugador organizador, Deporte deporte, int jugadoresRequeridos) {
         this.organizador = organizador;
         this.deporte = deporte;
-        this.ubicacion = ubicacion;
         this.jugadoresRequeridos = jugadoresRequeridos;
         this.estado = new NecesitamosJugadores();
     }

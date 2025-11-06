@@ -8,19 +8,19 @@ public class Jugador {
     private String password;
     private int edad;
     private Deporte deporteFavorito;
-    private Ubicacion ubicacion;
+    private Zona zona;
     private String pushToken;
     private ITipoNivel nivel;
 
     public Jugador() {}
 
-    public Jugador(String nombre, String mail, String password, int edad, Deporte deporteFavorito, Ubicacion ubicacion) {
+    public Jugador(String nombre, String mail, String password, int edad, Deporte deporteFavorito, Zona zona) {
         this.nombre = nombre;
         this.mail = mail;
         this.password = password;
         this.edad = edad;
         this.deporteFavorito = deporteFavorito;
-        this.ubicacion = ubicacion;
+        this.zona = zona;
     }
 
     public String getNombre() {
@@ -63,12 +63,12 @@ public class Jugador {
         this.deporteFavorito = deporteFavorito;
     }
 
-    public Ubicacion getUbicacion() {
-        return ubicacion;
+    public Zona getZona() {
+        return zona;
     }
 
-    public void setUbicacion(Ubicacion ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setZona(Zona zona) {
+        this.zona = zona;
     }
 
     public String getPushToken() {
