@@ -7,11 +7,12 @@ public class NecesitamosJugadores implements IEstadoPartido {
     public void agregarJugadorAPartido(Partido partido) {
         int n = partido.getJugadores().size();
         System.out.println("[NecesitamosJugadores] Hay " + n + " jugador(es). Al agregar uno, se revisará si pasa a PartidoArmado.");
-        if (n >= partido.getJugadoresRequeridos()) {
+        if (n == partido.getJugadoresRequeridos()) {
             partido.setEstado(new PartidoArmado());
         } else {
             System.out.println("[NecesitamosJugadores] Aún faltan jugadores para armar el partido.");
         }
+        System.out.println("Se ha agregado al partido correctamente!");
     }
 
     @Override

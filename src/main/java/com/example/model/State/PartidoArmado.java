@@ -5,7 +5,7 @@ import com.example.model.entity.Partido;
 public class PartidoArmado implements IEstadoPartido {
     @Override
     public void agregarJugadorAPartido(Partido partido) {
-        System.out.println("[PartidoArmado] Se puede seguir agregando jugadores. Estado permanece PartidoArmado.");
+        System.out.println("[PartidoArmado] No se puede seguir agregando jugadores.");
     }
 
     @Override
