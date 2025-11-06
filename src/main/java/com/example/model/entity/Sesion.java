@@ -1,5 +1,6 @@
 package com.example.model.entity;
 
+import com.example.dto.AccesoDTO;
 import com.example.model.strategy.emparejamiento.GestorEmparejamiento;
 
 import java.util.ArrayList;
@@ -15,7 +16,26 @@ public class Sesion {
 
     private final List<Jugador> jugadores = new ArrayList<>();
 
-    public void add(Jugador j) { if (j != null) jugadores.add(j); }
+    private Jugador usuarioActual;
+
+    public Jugador ingresar(AccesoDTO usuario) {
+        Jugador jugador = this.findByEmail(usuario.getMail());
+        if (jugador != null && usuario.getPassword().equals(jugador.getPassword())) {
+            usuarioActual = jugador;
+            return jugador;
+        }
+        return null;
+    }
+
+    public void add(Jugador jugador) {
+        if (jugador != null && this.findByEmail(jugador.getMail()) == null) {
+            jugadores.add(jugador);
+        }
+    }
+
+    public Jugador getUsuarioActual() {
+        return usuarioActual;
+    }
 
     public List<Jugador> getAllJugadores() { return new ArrayList<>(jugadores); }
 

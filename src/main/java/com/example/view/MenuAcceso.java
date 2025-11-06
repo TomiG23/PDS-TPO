@@ -22,7 +22,7 @@ public class MenuAcceso extends View {
                     isLogging = false;
                     break;
                 case 1:
-                    IngresarUsuario ingresarUsuario = new IngresarUsuario(scanner);
+                    IngresarUsuarioView ingresarUsuario = new IngresarUsuarioView(scanner);
                     ingresarUsuario.mostrarIngreso();
                     isLogging = false;
                     break;
