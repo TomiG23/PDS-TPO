@@ -4,20 +4,13 @@ import com.example.model.entity.*;
 import com.example.notification.adapter.FirebasePushClientAdapter;
 import com.example.notification.adapter.JavaMailEmailClientAdapter;
 import com.example.notification.service.NotificationService;
-import com.example.notification.service.UserDirectory;
 import com.example.notification.strategy.EmailNotificationStrategy;
 import com.example.notification.strategy.NotificationStrategy;
 import com.example.notification.strategy.PushNotificationStrategy;
-import com.example.view.MenuView;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main{
     public static void main(String[] args) {
-        System.out.println("==== DEMO Notificaciones y Estados de Partido ====");
-
-        // Directory de usuarios en memoria
         Sesion sesion = Sesion.getInstance();
 
         // Crear algunos usuarios

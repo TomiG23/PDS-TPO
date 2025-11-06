@@ -10,7 +10,6 @@ import com.example.model.strategy.tipoNivel.Intermedio;
 import com.example.model.strategy.tipoNivel.ITipoNivel;
 import com.example.model.strategy.tipoNivel.Principiante;
 import com.example.notification.service.NotificationService;
-import com.example.notification.service.UserDirectory;
 import com.example.notification.strategy.EmailNotificationStrategy;
 import com.example.notification.strategy.NotificationStrategy;
 import com.example.notification.strategy.PushNotificationStrategy;
@@ -103,8 +102,20 @@ public class MenuView {
         String nombre = scanner.nextLine().trim();
         System.out.print("Correo electrónico: ");
         String email = scanner.nextLine().trim();
-        System.out.print("Contraseña: ");
+        boolean estaMailOcupado = sesion.findByEmail(email) instanceof Jugador;
+        while (estaMailOcupado) {
+            System.out.print("Error: El mail ya se encuentra registrado\nIngrese otro email: ");
+            email = scanner.nextLine().trim();
+            estaMailOcupado = sesion.findByEmail(email) instanceof Jugador;
+        }
+        System.out.print("Contraseña (3 caracteres minimo): ");
         String password = scanner.nextLine().trim();
+        boolean esPassValida = password.length() >= 3;
+        while (!esPassValida) {
+            System.out.print("Error: La contraseña debe ser de al menos 3 caracteres\nIngrese nuevamente: ");
+            password = scanner.nextLine().trim();
+            esPassValida = password.length() >= 3;
+        }
         System.out.print("Deporte favorito (ej. Futbol, Basquet): ");
         String nombreDeporte = scanner.nextLine().trim();
         Deporte deporte = new Deporte(nombreDeporte);
@@ -124,18 +135,8 @@ public class MenuView {
      * realiza buscando por correo electrónico y comparando contraseñas.
      */
     private void iniciarSesion() {
-        System.out.println("\n--- Iniciar sesión ---");
-        System.out.print("Correo electrónico: ");
-        String email = scanner.nextLine().trim();
-        System.out.print("Contraseña: ");
-        String password = scanner.nextLine().trim();
-        Jugador jugador = sesion.findByEmail(email);
-        if (jugador != null && password.equals(jugador.getPassword())) {
-            usuarioActual = jugador;
-            System.out.println("Bienvenido, " + usuarioActual.getNombre() + "!");
-        } else {
-            System.out.println("Credenciales inválidas. Por favor registre un usuario o intente nuevamente.");
-        }
+        IngresarUsuarioView ingresarUsuarioView = new IngresarUsuarioView(scanner);
+        ingresarUsuarioView.mostrarIngreso();
     }
 
     /**
