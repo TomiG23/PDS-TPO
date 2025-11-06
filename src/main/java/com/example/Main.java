@@ -1,9 +1,6 @@
 package com.example;
 
-import com.example.model.entity.Deporte;
-import com.example.model.entity.Jugador;
-import com.example.model.entity.Partido;
-import com.example.model.entity.Zona;
+import com.example.model.entity.*;
 import com.example.notification.adapter.FirebasePushClientAdapter;
 import com.example.notification.adapter.JavaMailEmailClientAdapter;
 import com.example.notification.service.NotificationService;
@@ -21,7 +18,7 @@ public class Main{
         System.out.println("==== DEMO Notificaciones y Estados de Partido ====");
 
         // Directory de usuarios en memoria
-        InMemoryUserDirectory userDirectory = new InMemoryUserDirectory();
+        Sesion sesion = Sesion.getInstance();
 
         // Crear algunos usuarios
         Deporte futbol = new Deporte("Futbol");
@@ -35,15 +32,15 @@ public class Main{
         Jugador caro = new Jugador("Caro", "caro@example.com", "pass", 22, basket, caba);
         caro.setPushToken("token-CARO");
 
-        userDirectory.add(ana);
-        userDirectory.add(bruno);
-        userDirectory.add(caro);
+        sesion.add(ana);
+        sesion.add(bruno);
+        sesion.add(caro);
 
         // Configurar estrategias y adaptadores
         NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
         NotificationStrategy push = new PushNotificationStrategy(new FirebasePushClientAdapter());
 
-        NotificationService notificationService = new NotificationService(email, push, userDirectory);
+        NotificationService notificationService = new NotificationService(email, push);
 
         // Crear partido de Futbol requiriendo 2 jugadores
         Jugador organizador = ana;
@@ -171,13 +168,4 @@ public class Main{
         com.example.view.MenuView menu = new com.example.view.MenuView();
         menu.run();
     }
-}
-
-class InMemoryUserDirectory implements UserDirectory {
-    private final List<Jugador> jugadores = new ArrayList<>();
-
-    public void add(Jugador j) { if (j != null) jugadores.add(j); }
-
-    @Override
-    public List<Jugador> getAllJugadores() { return new ArrayList<>(jugadores); }
 }

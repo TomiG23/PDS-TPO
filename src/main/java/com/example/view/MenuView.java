@@ -1,9 +1,6 @@
 package com.example.view;
 
-import com.example.model.entity.Deporte;
-import com.example.model.entity.Jugador;
-import com.example.model.entity.Partido;
-import com.example.model.entity.Zona;
+import com.example.model.entity.*;
 import com.example.model.strategy.emparejamiento.EmparejamientoHistorialImpl;
 import com.example.model.strategy.emparejamiento.EmparejamientoNivelImpl;
 import com.example.model.strategy.emparejamiento.EmparejamientoZonaImpl;
@@ -12,7 +9,6 @@ import com.example.model.strategy.tipoNivel.Avanzado;
 import com.example.model.strategy.tipoNivel.Intermedio;
 import com.example.model.strategy.tipoNivel.ITipoNivel;
 import com.example.model.strategy.tipoNivel.Principiante;
-import com.example.notification.service.InMemoryUserDirectory;
 import com.example.notification.service.NotificationService;
 import com.example.notification.service.UserDirectory;
 import com.example.notification.strategy.EmailNotificationStrategy;
@@ -21,7 +17,6 @@ import com.example.notification.strategy.PushNotificationStrategy;
 import com.example.notification.adapter.JavaMailEmailClientAdapter;
 import com.example.notification.adapter.FirebasePushClientAdapter;
 
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -35,7 +30,7 @@ import java.util.Scanner;
  * corresponde.
  */
 public class MenuView {
-    private final UserDirectory userDirectory;
+    private final Sesion sesion;
     private final NotificationService notificationService;
     private final GestorEmparejamiento gestor;
     private final Scanner scanner;
@@ -47,10 +42,10 @@ public class MenuView {
     private Jugador usuarioActual;
 
     public MenuView() {
-        this.userDirectory = new InMemoryUserDirectory();
+        sesion = Sesion.getInstance();
         NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
         NotificationStrategy push = new PushNotificationStrategy(new FirebasePushClientAdapter());
-        this.notificationService = new NotificationService(email, push, userDirectory);
+        this.notificationService = new NotificationService(email, push);
         this.gestor = GestorEmparejamiento.getInstance();
         this.scanner = new Scanner(System.in);
     }
@@ -119,8 +114,7 @@ public class MenuView {
         ITipoNivel nivel = leerNivel();
         Jugador jugador = new Jugador(nombre, email, password, 0, deporte, zona);
         jugador.setNivel(nivel);
-        // Para simplificar no solicitamos edad real ni token push
-        ((InMemoryUserDirectory) userDirectory).add(jugador);
+        sesion.add(jugador);
         System.out.println("Usuario registrado con éxito.");
     }
 
@@ -135,12 +129,9 @@ public class MenuView {
         String email = scanner.nextLine().trim();
         System.out.print("Contraseña: ");
         String password = scanner.nextLine().trim();
-        Jugador j = null;
-        if (userDirectory instanceof InMemoryUserDirectory) {
-            j = ((InMemoryUserDirectory) userDirectory).findByEmail(email);
-        }
-        if (j != null && password.equals(j.getPassword())) {
-            usuarioActual = j;
+        Jugador jugador = sesion.findByEmail(email);
+        if (jugador != null && password.equals(jugador.getPassword())) {
+            usuarioActual = jugador;
             System.out.println("Bienvenido, " + usuarioActual.getNombre() + "!");
         } else {
             System.out.println("Credenciales inválidas. Por favor registre un usuario o intente nuevamente.");

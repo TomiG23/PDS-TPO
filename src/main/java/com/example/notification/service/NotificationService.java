@@ -3,6 +3,7 @@ package com.example.notification.service;
 import com.example.model.entity.Deporte;
 import com.example.model.entity.Jugador;
 import com.example.model.entity.Partido;
+import com.example.model.entity.Sesion;
 import com.example.notification.NotificationMessage;
 import com.example.notification.observer.INotificationObserver;
 import com.example.notification.observer.PartidoEvents;
@@ -17,14 +18,13 @@ import java.util.Set;
 public class NotificationService implements INotificationObserver {
     private final NotificationStrategy emailStrategy;
     private final NotificationStrategy pushStrategy;
-    private final UserDirectory userDirectory;
+    private final Sesion sesion = Sesion.getInstance();
 
     public NotificationService(NotificationStrategy emailStrategy,
-                               NotificationStrategy pushStrategy,
-                               UserDirectory userDirectory) {
+                               NotificationStrategy pushStrategy
+                               ) {
         this.emailStrategy = emailStrategy;
         this.pushStrategy = pushStrategy;
-        this.userDirectory = userDirectory;
     }
 
     @Override
@@ -44,8 +44,8 @@ public class NotificationService implements INotificationObserver {
                 // Notificar a usuarios cuyo deporte favorito coincide
                 Deporte dep = partido.getDeporte();
                 String nombreDep = dep != null ? dep.getNombre() : null;
-                if (userDirectory != null && nombreDep != null) {
-                    for (Jugador j : userDirectory.getAllJugadores()) {
+                if (sesion != null && nombreDep != null) {
+                    for (Jugador j : sesion.getAllJugadores()) {
                         if (j != null && j.getDeporteFavorito() != null &&
                                 Objects.equals(nombreDep, j.getDeporteFavorito().getNombre())) {
                             result.add(j);
