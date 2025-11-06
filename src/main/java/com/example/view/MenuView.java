@@ -231,7 +231,6 @@ public class MenuView {
         }
         Partido elegido = lista.get(opcion - 1);
         elegido.agregarJugador(usuarioActual);
-        System.out.println("Te has unido al partido organizado por " + elegido.getOrganizador().getNombre());
     }
 
     /**
