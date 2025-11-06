@@ -16,13 +16,15 @@ public class DetallePartido extends View {
         System.out.println("Partido: " + partido);
         ArrayList<String> opciones = new ArrayList<>(List.of("Aceptar", "Volver"));
         mostrarOpcipnes(opciones);
-        int opcion = seleccionarOpcion("seleccione opcion> ", opciones);
+        String opcion = seleccionarOpcion();
         switch (opcion) {
-            case 0:
+            case "0":
                 System.out.println("Partido aceptado");
                 break;
-            case 1:
+            case "1":
                 break;
+            default:
+                System.out.println("opcion no valida");
         }
     }
 }

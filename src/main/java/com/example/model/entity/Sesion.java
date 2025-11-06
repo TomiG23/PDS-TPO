@@ -1,7 +1,6 @@
 package com.example.model.entity;
 
 import com.example.dto.AccesoDTO;
-import com.example.model.strategy.emparejamiento.GestorEmparejamiento;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +26,12 @@ public class Sesion {
         return null;
     }
 
-    public void add(Jugador jugador) {
+    public Jugador registrar(Jugador jugador) {
         if (jugador != null && this.findByEmail(jugador.getMail()) == null) {
             jugadores.add(jugador);
+            return jugador;
         }
+        return null;
     }
 
     public Jugador getUsuarioActual() {
@@ -54,5 +55,9 @@ public class Sesion {
             }
         }
         return null;
+    }
+
+    public void cerrarSesion() {
+        this.usuarioActual = null;
     }
 }
