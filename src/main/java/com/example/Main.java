@@ -86,6 +86,12 @@ public class Main{
         Jugador sofia = new Jugador("Sofia", "sofia@example.com", "pass", new Habilidad(deporteFutbol, new Principiante()));
         Jugador juan = new Jugador("Juan", "juan@example.com", "pass", new Habilidad(deporteFutbol, new Avanzado()));
 
+        sesion.registrar(lucas);
+        sesion.registrar(maria);
+        sesion.registrar(pablo);
+        sesion.registrar(sofia);
+        sesion.registrar(juan);
+
         // Obtener la instancia del gestor de emparejamientos (Singleton)
         com.example.model.strategy.emparejamiento.GestorEmparejamiento gestor =
                 com.example.model.strategy.emparejamiento.GestorEmparejamiento.getInstance();
