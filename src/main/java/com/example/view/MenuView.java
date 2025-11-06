@@ -3,7 +3,7 @@ package com.example.view;
 import com.example.model.entity.*;
 import com.example.model.strategy.emparejamiento.EmparejamientoHistorialImpl;
 import com.example.model.strategy.emparejamiento.EmparejamientoNivelImpl;
-import com.example.model.strategy.emparejamiento.EmparejamientoZonaImpl;
+import com.example.model.strategy.emparejamiento.EmparejamientoZonaNivelCustomImpl;
 import com.example.model.strategy.emparejamiento.GestorEmparejamiento;
 import com.example.model.strategy.tipoNivel.Avanzado;
 import com.example.model.strategy.tipoNivel.Intermedio;
@@ -16,6 +16,7 @@ import com.example.notification.strategy.PushNotificationStrategy;
 import com.example.notification.adapter.JavaMailEmailClientAdapter;
 import com.example.notification.adapter.FirebasePushClientAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -76,13 +77,7 @@ public class MenuView extends View {
                     default -> System.out.println("Opción no válida. Intente nuevamente.");
                 }
             }
-
-//            System.out.println("5. Unirse a un partido");
-//            System.out.println("6. Confirmar partido");
-//            System.out.println("7. Iniciar partido");
-//            System.out.println("8. Finalizar partido");
-//            System.out.println("9. Cancelar partido");
-
+            System.out.println();
         }
         System.out.println("Saliendo de la aplicación. ¡Hasta luego!");
     }
@@ -136,45 +131,107 @@ public class MenuView extends View {
         System.out.print("Opción: ");
         String op = scanner.nextLine().trim();
         switch (op) {
-            case "1" -> gestor.setEstrategia(new EmparejamientoZonaImpl());
+            case "1" -> {
+                // Obtener zonas únicas de los partidos disponibles
+                List<Partido> todosPartidos = gestor.getPartidos();
+                List<String> zonasDisponibles = new ArrayList<>();
+                for (Partido p : todosPartidos) {
+                    if (p.getUbicacion() != null) {
+                        String nombreZona = p.getUbicacion().getNombre();
+                        if (nombreZona != null && !zonasDisponibles.contains(nombreZona)) {
+                            zonasDisponibles.add(nombreZona);
+                        }
+                    }
+                }
+
+                if (zonasDisponibles.isEmpty()) {
+                    System.out.println("No hay zonas disponibles en los partidos existentes.");
+                    return;
+                }
+
+                // Mostrar zonas disponibles
+                System.out.println("\nZonas disponibles:");
+                for (int i = 0; i < zonasDisponibles.size(); i++) {
+                    System.out.println((i + 1) + ". " + zonasDisponibles.get(i));
+                }
+
+                int opcionZona;
+                while (true) {
+                    opcionZona = leerEntero("Seleccione el número de zona (0 para volver al menú): ");
+                    if (opcionZona == 0) {
+                        System.out.println("Volviendo al menú principal.");
+                        return;
+                    }
+                    if (opcionZona > 0 && opcionZona <= zonasDisponibles.size()) {
+                        break; // Opción válida
+                    }
+                    System.out.println("Opción inválida. Seleccione una zona de la lista o 0 para volver al menú.");
+                }
+
+                String zonaNombre = zonasDisponibles.get(opcionZona - 1);
+                Zona zonaBuscada = new Zona(zonaNombre);
+                gestor.setEstrategia(new EmparejamientoZonaNivelCustomImpl(zonaBuscada));
+            }
             case "2" -> gestor.setEstrategia(new EmparejamientoNivelImpl());
             case "3" -> gestor.setEstrategia(new EmparejamientoHistorialImpl());
             default -> gestor.setEstrategia(null);
         }
         List<Partido> encontrados = gestor.buscarPartidosPara(usuarioActual);
-        if (encontrados.isEmpty()) {
+
+        // Filtrar partidos creados por el usuario actual y partidos a los que ya se unió
+        List<Partido> partidosFiltrados = new ArrayList<>();
+        for (Partido p : encontrados) {
+            // Excluir si es el organizador
+            if (p.getOrganizador() != null && p.getOrganizador().equals(usuarioActual)) {
+                continue;
+            }
+            // Excluir si ya está en la lista de jugadores
+            if (p.getJugadores() != null && p.getJugadores().contains(usuarioActual)) {
+                continue;
+            }
+            partidosFiltrados.add(p);
+        }
+
+        if (partidosFiltrados.isEmpty()) {
             System.out.println("No se encontraron partidos para los criterios seleccionados.");
             return;
         }
         System.out.println("Partidos encontrados:");
         int idx = 1;
-        for (Partido p : encontrados) {
+        for (Partido p : partidosFiltrados) {
             System.out.println(idx++ + ". " + descripcionPartido(p));
         }
-    }
 
-    /**
-     * Permite al usuario actual unirse a uno de los partidos listados por
-     * el gestor.  Si el partido alcanzara el cupo de jugadores tras la
-     * operación, cambiará automáticamente su estado y notificará a los
-     * participantes.
-     */
-    private void unirseAPartido() {
-        if (!verificarSesion()) return;
-        List<Partido> lista = gestor.getPartidos();
-        if (lista.isEmpty()) {
-            System.out.println("No hay partidos disponibles.");
+        // Preguntar si desea unirse a alguno con validación
+        System.out.println("\n¿Desea unirse a alguno de estos partidos?");
+        int opcionUnirse;
+        while (true) {
+            opcionUnirse = leerEntero("Seleccione el número de partido (0 para volver al menú principal): ");
+            if (opcionUnirse == 0) {
+                System.out.println("Volviendo al menú principal.");
+                return;
+            }
+            if (opcionUnirse > 0 && opcionUnirse <= partidosFiltrados.size()) {
+                break; // Opción válida
+            }
+            System.out.println("Opción inválida. Seleccione un partido de la lista o 0 para volver al menú principal.");
+        }
+        Partido elegido = partidosFiltrados.get(opcionUnirse - 1);
+
+        // Validar que no sea su propio partido
+        if (elegido.getOrganizador() != null && elegido.getOrganizador().equals(usuarioActual)) {
+            System.out.println("No puedes unirte a tu propio partido. Ya estás registrado como organizador.");
             return;
         }
-        System.out.println("\n--- Unirse a un partido ---");
-        mostrarListadoPartidos(lista);
-        int opcion = leerEntero("Seleccione el número de partido al que desea unirse (0 para cancelar): ");
-        if (opcion <= 0 || opcion > lista.size()) {
-            System.out.println("Operación cancelada.");
+
+        // Validar que no esté ya anotado
+        if (elegido.getJugadores() != null && elegido.getJugadores().contains(usuarioActual)) {
+            System.out.println("Ya estás anotado en este partido.");
             return;
         }
-        Partido elegido = lista.get(opcion - 1);
+
         elegido.agregarJugador(usuarioActual);
+        System.out.println("Te has unido al partido organizado por " + elegido.getOrganizador().getNombre());
     }
 
     /**
