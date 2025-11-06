@@ -30,14 +30,14 @@ public class MenuBusquedaPartido extends View {
     public void mostrarMenu() {
         ArrayList<String> opciones = new ArrayList<>(List.of("Volver", "busqueda por zona", "Busqueda por nivel partido", "Busqueda por historial"));
         mostrarOpcipnes(opciones);
-        int opcion = seleccionarOpcion("seleccione opcion> ", opciones);
+        String opcion = seleccionarOpcion();
 
         DetallePartido detallePartido = new DetallePartido(scanner);
 
         switch (opcion) {
-            case 0:
+            case "0":
                 break;
-            case 1:
+            case "1":
                 ArrayList<String> partidosZona = new ArrayList<String>();
                 partidosZona.add("pinamar");
                 partidosZona.add("buenos aires");
@@ -47,7 +47,7 @@ public class MenuBusquedaPartido extends View {
                 partidoSeleccionado = seleccionarPartido(partidosZona);
                 detallePartido.mostrarDetalle(partidoSeleccionado);
                 break;
-            case 2:
+            case "2":
                 ArrayList<String> partidosNivel = new ArrayList<String>();
                 partidosNivel.add("basico");
                 partidosNivel.add("intermedio");
@@ -57,7 +57,7 @@ public class MenuBusquedaPartido extends View {
                 partidoSeleccionado = seleccionarPartido(partidosNivel);
                 detallePartido.mostrarDetalle(partidoSeleccionado);
                 break;
-            case 3:
+            case "3":
                 System.out.println("Seleccione el numero de partido");
                 ArrayList<String> partidosHistorial = new ArrayList<String>();
                 partidosHistorial.add("basico");
@@ -68,6 +68,8 @@ public class MenuBusquedaPartido extends View {
                 partidoSeleccionado = seleccionarPartido(partidosHistorial);
                 detallePartido.mostrarDetalle(partidoSeleccionado);
                 break;
+            default:
+                System.out.println("opcion no valida");
         }
     }
 }

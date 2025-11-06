@@ -12,10 +12,10 @@ public class EmparejamientoZonaImpl implements IEmparejamientoEstrategia {
     public List<Partido> emparejar(List<Partido> partidos, Jugador jugador) {
         List<Partido> out = new ArrayList<>();
         if (partidos == null || jugador == null) return out;
-        String zonaJugador = jugador.getZona() != null ? jugador.getZona().getNombre() : null;
+//        String zonaJugador = jugador.getZona() != null ? jugador.getZona().getNombre() : null;
         for (Partido p : partidos) {
             String zonaPartido = p.getUbicacion() != null ? p.getUbicacion().getNombre() : null;
-            if (Objects.equals(zonaJugador, zonaPartido)) out.add(p);
+//            if (Objects.equals(zonaJugador, zonaPartido)) out.add(p);
         }
         return out;
     }

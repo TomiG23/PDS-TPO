@@ -1,36 +1,42 @@
 package com.example.view;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuAcceso extends View {
+    private boolean salir = false;
 
     public MenuAcceso(Scanner scanner) {
         super(scanner);
     }
 
-    public void mostrarMenu(Scanner scanner) {
-        boolean isLogging = true;
-        while(isLogging){
-            ArrayList<String> opciones = new ArrayList<>(List.of("Salir", "Ingresar", "Registrarse"));
-            mostrarOpcipnes(opciones);
-            int opcion = seleccionarOpcion("seleccione opcion> ", opciones);
-
-            switch (opcion) {
-                case 0:
-                    isLogging = false;
-                    break;
-                case 1:
-                    IngresarUsuarioView ingresarUsuario = new IngresarUsuarioView(scanner);
-                    ingresarUsuario.mostrarIngreso();
-                    isLogging = false;
-                    break;
-                case 2:
-                    RegistrarUsuario registrarUsuario = new RegistrarUsuario();
-                    registrarUsuario.mostarRegistro(scanner);
-                    break;
-            }
+    public void mostrarMenu() {
+        mostrarOpcipnes(List.of("Salir", "Registrarse", "Ingresar"));
+        String opcion = seleccionarOpcion();
+        switch (opcion) {
+            case "1" -> registrarUsuario();
+            case "2" -> iniciarSesion();
+            case "0" -> salir();
+            default -> System.out.println("Opción no válida. Intente nuevamente.");
         }
     }
+
+    private void registrarUsuario() {
+        RegistrarUsuario registrarUsuario = new RegistrarUsuario(scanner);
+        registrarUsuario.mostarRegistro();
+    }
+
+    private void iniciarSesion() {
+        IngresarUsuarioView ingresarUsuarioView = new IngresarUsuarioView(scanner);
+        ingresarUsuarioView.mostrarIngreso();
+    }
+
+    private void salir() {
+        salir = true;
+    }
+
+    public boolean getSalir() {
+        return salir;
+    }
 }
+

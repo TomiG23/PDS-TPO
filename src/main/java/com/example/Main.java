@@ -1,12 +1,17 @@
 package com.example;
 
 import com.example.model.entity.*;
+import com.example.model.strategy.tipoNivel.Avanzado;
+import com.example.model.strategy.tipoNivel.Intermedio;
+import com.example.model.strategy.tipoNivel.Principiante;
 import com.example.notification.adapter.FirebasePushClientAdapter;
 import com.example.notification.adapter.JavaMailEmailClientAdapter;
 import com.example.notification.service.NotificationService;
 import com.example.notification.strategy.EmailNotificationStrategy;
 import com.example.notification.strategy.NotificationStrategy;
 import com.example.notification.strategy.PushNotificationStrategy;
+import com.example.view.MenuView;
+
 import java.util.List;
 
 public class Main{
@@ -18,16 +23,16 @@ public class Main{
         Deporte basket = new Deporte("Basquet");
         Zona caba = new Zona();
 
-        Jugador ana = new Jugador("Ana", "ana@example.com", "pass", 25, futbol, caba);
+        Jugador ana = new Jugador("Ana", "ana@example.com", "pass", new Habilidad(futbol, new Principiante()));
         ana.setPushToken("token-ANA");
-        Jugador bruno = new Jugador("Bruno", "bruno@example.com", "pass", 28, futbol, caba);
+        Jugador bruno = new Jugador("Bruno", "bruno@example.com", "pass", new Habilidad(futbol, new Principiante()));
         bruno.setPushToken("token-BRUNO");
-        Jugador caro = new Jugador("Caro", "caro@example.com", "pass", 22, basket, caba);
+        Jugador caro = new Jugador("Caro", "caro@example.com", "pass", new Habilidad(futbol, new Principiante()));
         caro.setPushToken("token-CARO");
 
-        sesion.add(ana);
-        sesion.add(bruno);
-        sesion.add(caro);
+        sesion.registrar(ana);
+        sesion.registrar(bruno);
+        sesion.registrar(caro);
 
         // Configurar estrategias y adaptadores
         NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
@@ -75,18 +80,11 @@ public class Main{
         Deporte deporteFutbol = new Deporte("Futbol");
 
         // Crear jugadores con distintos niveles y zonas
-        Jugador lucas = new Jugador("Lucas", "lucas@example.com", "pass", 30, deporteFutbol, zonaNorte);
-        Jugador maria = new Jugador("Maria", "maria@example.com", "pass", 27, deporteFutbol, zonaNorte);
-        Jugador pablo = new Jugador("Pablo", "pablo@example.com", "pass", 35, deporteFutbol, zonaSur);
-        Jugador sofia = new Jugador("Sofia", "sofia@example.com", "pass", 20, deporteFutbol, zonaSur);
-        Jugador juan = new Jugador("Juan", "juan@example.com", "pass", 32, deporteFutbol, zonaNorte);
-
-        // Asignar niveles a cada jugador
-        lucas.setNivel(new com.example.model.strategy.tipoNivel.Principiante());
-        maria.setNivel(new com.example.model.strategy.tipoNivel.Intermedio());
-        pablo.setNivel(new com.example.model.strategy.tipoNivel.Avanzado());
-        sofia.setNivel(new com.example.model.strategy.tipoNivel.Principiante());
-        juan.setNivel(new com.example.model.strategy.tipoNivel.Avanzado());
+        Jugador lucas = new Jugador("Lucas", "lucas@example.com", "pass", new Habilidad(deporteFutbol, new Principiante()));
+        Jugador maria = new Jugador("Maria", "maria@example.com", "pass", new Habilidad(deporteFutbol, new Intermedio()));
+        Jugador pablo = new Jugador("Pablo", "pablo@example.com", "pass", new Habilidad(deporteFutbol, new Avanzado()));
+        Jugador sofia = new Jugador("Sofia", "sofia@example.com", "pass", new Habilidad(deporteFutbol, new Principiante()));
+        Jugador juan = new Jugador("Juan", "juan@example.com", "pass", new Habilidad(deporteFutbol, new Avanzado()));
 
         // Obtener la instancia del gestor de emparejamientos (Singleton)
         com.example.model.strategy.emparejamiento.GestorEmparejamiento gestor =
@@ -155,10 +153,7 @@ public class Main{
 
         System.out.println("==== FIN DEMO ESTRATEGIAS ====");
 
-        // -------------------------------------------------------------------------
-        // Vista de menú interactivo
-        System.out.println("\nAhora se iniciará la interfaz de consola para interactuar con el sistema.");
-        com.example.view.MenuView menu = new com.example.view.MenuView();
+        MenuView menu = new MenuView();
         menu.run();
     }
 }

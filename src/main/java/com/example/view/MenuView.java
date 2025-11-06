@@ -28,11 +28,10 @@ import java.util.Scanner;
  * {@link NotificationService} para notificar a los usuarios cuando
  * corresponde.
  */
-public class MenuView {
+public class MenuView extends View {
     private final Sesion sesion;
     private final NotificationService notificationService;
     private final GestorEmparejamiento gestor;
-    private final Scanner scanner;
 
     /**
      * Jugador autenticado en la sesión actual.  Se actualiza al iniciar
@@ -41,12 +40,12 @@ public class MenuView {
     private Jugador usuarioActual;
 
     public MenuView() {
+        super(new Scanner(System.in));
         sesion = Sesion.getInstance();
         NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
         NotificationStrategy push = new PushNotificationStrategy(new FirebasePushClientAdapter());
         this.notificationService = new NotificationService(email, push);
         this.gestor = GestorEmparejamiento.getInstance();
-        this.scanner = new Scanner(System.in);
     }
 
     /**
@@ -54,89 +53,42 @@ public class MenuView {
      * que el usuario seleccione la opción de salir.
      */
     public void run() {
-        boolean salir = false;
-        while (!salir) {
-            mostrarOpciones();
-            System.out.print("Seleccione una opción: ");
-            String opcion = scanner.nextLine().trim();
-            switch (opcion) {
-                case "1" -> registrarUsuario();
-                case "2" -> iniciarSesion();
-                case "3" -> crearPartido();
-                case "4" -> buscarPartidos();
-                case "5" -> unirseAPartido();
-                case "6" -> confirmarPartido();
-                case "7" -> iniciarPartido();
-                case "8" -> finalizarPartido();
-                case "9" -> cancelarPartido();
-                case "0" -> salir = true;
-                default -> System.out.println("Opción no válida. Intente nuevamente.");
+        MenuAcceso menuAcceso = new MenuAcceso(scanner);
+        while (!menuAcceso.getSalir()) {
+            boolean estaLoggeado = sesion.getUsuarioActual() != null;
+
+            if (!estaLoggeado) {
+                System.out.println("\n======");
+                menuAcceso.mostrarMenu();
+            } else {
+                System.out.println("\n=== Menú Principal === " + sesion.getUsuarioActual().getNombre());
+                mostrarOpcipnes(List.of("Cerrar sesion", "Crear partido", "Buscar partidos", "Agregar habilidad"));
+                String opcion = seleccionarOpcion();
+                switch (opcion) {
+                    case "1" -> crearPartido();
+                    case "2" -> buscarPartidos();
+                    case "3" -> agregarHabilidad();
+//                    case "6" -> confirmarPartido();
+//                    case "7" -> iniciarPartido();
+//                    case "8" -> finalizarPartido();
+//                    case "9" -> cancelarPartido();
+                    case "0" -> cerrarSesion();
+                    default -> System.out.println("Opción no válida. Intente nuevamente.");
+                }
             }
-            System.out.println();
+
+//            System.out.println("5. Unirse a un partido");
+//            System.out.println("6. Confirmar partido");
+//            System.out.println("7. Iniciar partido");
+//            System.out.println("8. Finalizar partido");
+//            System.out.println("9. Cancelar partido");
+
         }
         System.out.println("Saliendo de la aplicación. ¡Hasta luego!");
     }
 
-    private void mostrarOpciones() {
-        System.out.println("\n=== Menú Principal ===");
-        System.out.println("1. Registrar nuevo usuario");
-        System.out.println("2. Iniciar sesión");
-        System.out.println("3. Crear partido");
-        System.out.println("4. Buscar partidos");
-        System.out.println("5. Unirse a un partido");
-        System.out.println("6. Confirmar partido");
-        System.out.println("7. Iniciar partido");
-        System.out.println("8. Finalizar partido");
-        System.out.println("9. Cancelar partido");
-        System.out.println("0. Salir");
-    }
-
-    /**
-     * Solicita datos al usuario para registrar un nuevo jugador y lo
-     * almacena en el directorio de usuarios.  Se incluyen las opciones de
-     * deporte favorito, zona y nivel de habilidad.
-     */
-    private void registrarUsuario() {
-        System.out.println("\n--- Registro de usuario ---");
-        System.out.print("Nombre: ");
-        String nombre = scanner.nextLine().trim();
-        System.out.print("Correo electrónico: ");
-        String email = scanner.nextLine().trim();
-        boolean estaMailOcupado = sesion.findByEmail(email) instanceof Jugador;
-        while (estaMailOcupado) {
-            System.out.print("Error: El mail ya se encuentra registrado\nIngrese otro email: ");
-            email = scanner.nextLine().trim();
-            estaMailOcupado = sesion.findByEmail(email) instanceof Jugador;
-        }
-        System.out.print("Contraseña (3 caracteres minimo): ");
-        String password = scanner.nextLine().trim();
-        boolean esPassValida = password.length() >= 3;
-        while (!esPassValida) {
-            System.out.print("Error: La contraseña debe ser de al menos 3 caracteres\nIngrese nuevamente: ");
-            password = scanner.nextLine().trim();
-            esPassValida = password.length() >= 3;
-        }
-        System.out.print("Deporte favorito (ej. Futbol, Basquet): ");
-        String nombreDeporte = scanner.nextLine().trim();
-        Deporte deporte = new Deporte(nombreDeporte);
-        System.out.print("Zona (ej. Norte, Sur, Centro): ");
-        String nombreZona = scanner.nextLine().trim();
-        Zona zona = new Zona(nombreZona);
-        ITipoNivel nivel = leerNivel();
-        Jugador jugador = new Jugador(nombre, email, password, 0, deporte, zona);
-        jugador.setNivel(nivel);
-        sesion.add(jugador);
-        System.out.println("Usuario registrado con éxito.");
-    }
-
-    /**
-     * Solicita al usuario sus credenciales y, si se encuentran en el
-     * directorio, establece al jugador como usuario actual.  El login se
-     * realiza buscando por correo electrónico y comparando contraseñas.
-     */
-    private void iniciarSesion() {
-        IngresarUsuarioView ingresarUsuarioView = new IngresarUsuarioView(scanner);
-        ingresarUsuarioView.mostrarIngreso();
+    private void cerrarSesion() {
+        sesion.cerrarSesion();
     }
 
     /**
@@ -335,6 +287,10 @@ public class MenuView {
         System.out.println("Partido cancelado correctamente.");
     }
 
+    private void agregarHabilidad() {
+        // todo agregar habilidad
+    }
+
     // Utilidades
     private boolean verificarSesion() {
         if (usuarioActual == null) {
@@ -361,38 +317,6 @@ public class MenuView {
         sb.append(", Nivel máximo: ").append(p.getMaxNivel() != null ? p.getMaxNivel().getNombre() : "Cualquiera");
         sb.append(", Estado: ").append(p.getEstado() != null ? p.getEstado().getNombreEstado() : "<sin estado>");
         return sb.toString();
-    }
-
-    private ITipoNivel leerNivel() {
-        while (true) {
-            System.out.print("Nivel (1=Principiante, 2=Intermedio, 3=Avanzado): ");
-            String input = scanner.nextLine().trim();
-            try {
-                int val = Integer.parseInt(input);
-                if (val >= 1 && val <= 3) {
-                    return crearNivelDesdeValor(val);
-                }
-            } catch (NumberFormatException e) {
-                // ignore
-            }
-            System.out.println("Entrada inválida. Debe ser 1, 2 o 3.");
-        }
-    }
-
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        return leerEntero();
-    }
-
-    private int leerEntero() {
-        while (true) {
-            String input = scanner.nextLine().trim();
-            try {
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.print("Entrada inválida. Por favor ingrese un número: ");
-            }
-        }
     }
 
     private ITipoNivel crearNivelDesdeValor(int val) {

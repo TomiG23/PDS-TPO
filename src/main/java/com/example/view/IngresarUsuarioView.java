@@ -17,9 +17,11 @@ public class IngresarUsuarioView extends View {
         AccesoDTO usuario = new AccesoDTO();
         System.out.println("\n--- Iniciar sesión ---");
         System.out.print("Correo electrónico: ");
-        usuario.setMail(scanner.nextLine().trim());
+        String mail = scanner.next().trim();
+        usuario.setMail(mail);
         System.out.print("Contraseña: ");
-        usuario.setPassword(scanner.nextLine().trim());
+        String password = scanner.next().trim();
+        usuario.setPassword(password);
         Jugador jugador = sesion.ingresar(usuario);
         if (jugador == null) {
             System.out.println("Credenciales inválidas. Por favor registre un usuario o intente nuevamente.");
