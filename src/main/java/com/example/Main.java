@@ -88,6 +88,12 @@ public class Main{
         Jugador sofia = new Jugador("Sofia", "sofia@example.com", "pass", 20, deporteFutbol, zonaSur);
         Jugador juan = new Jugador("Juan", "juan@example.com", "pass", 32, deporteFutbol, zonaNorte);
 
+        sesion.add(lucas);
+        sesion.add(maria);
+        sesion.add(pablo);
+        sesion.add(sofia);
+        sesion.add(juan);
+
         // Asignar niveles a cada jugador
         lucas.setNivel(new com.example.model.strategy.tipoNivel.Principiante());
         maria.setNivel(new com.example.model.strategy.tipoNivel.Intermedio());
