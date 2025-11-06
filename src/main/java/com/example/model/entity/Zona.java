@@ -9,11 +9,11 @@ public class Zona {
     public Zona() {}
 
     public Zona(String nombre) {
-        this.nombre = nombre;
+        this.nombre = capitalizar(nombre);
     }
 
     public Zona(String nombre, String codigo) {
-        this.nombre = nombre;
+        this.nombre = capitalizar(nombre);
         this.codigo = codigo;
     }
 
@@ -22,7 +22,7 @@ public class Zona {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = capitalizar(nombre);
     }
 
     public String getCodigo() {
@@ -31,6 +31,34 @@ public class Zona {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    /**
+     * Capitaliza la primera letra de cada palabra en el nombre de la zona.
+     * Por ejemplo: "norte" -> "Norte", "zona sur" -> "Zona Sur"
+     */
+    private String capitalizar(String texto) {
+        if (texto == null || texto.isEmpty()) {
+            return texto;
+        }
+        
+        String[] palabras = texto.trim().split("\\s+");
+        StringBuilder resultado = new StringBuilder();
+        
+        for (int i = 0; i < palabras.length; i++) {
+            String palabra = palabras[i];
+            if (!palabra.isEmpty()) {
+                resultado.append(Character.toUpperCase(palabra.charAt(0)));
+                if (palabra.length() > 1) {
+                    resultado.append(palabra.substring(1).toLowerCase());
+                }
+                if (i < palabras.length - 1) {
+                    resultado.append(" ");
+                }
+            }
+        }
+        
+        return resultado.toString();
     }
 
     @Override
