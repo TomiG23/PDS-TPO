@@ -90,6 +90,10 @@ public class Partido {
         return this.estado;
     }
 
+    public Deporte getDeporte() {
+        return deporte;
+    }
+
     // Método de utilidad
     public String mostrarEstado() {
         String nombre = (estado != null) ? estado.getNombreEstado() : "SinEstado";

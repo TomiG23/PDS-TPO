@@ -21,6 +21,7 @@ public class Main{
         // Crear algunos usuarios
         Deporte futbol = new Deporte("Futbol");
         Deporte basket = new Deporte("Basquet");
+        Deporte softball = new Deporte("Softball");
         Zona caba = new Zona();
 
         Jugador ana = new Jugador("Ana", "ana@example.com", "pass", new Habilidad(futbol, new Principiante()));
@@ -76,15 +77,12 @@ public class Main{
         Zona zonaNorte = new Zona("Norte");
         Zona zonaSur = new Zona("Sur");
 
-        // Crear deporte común para los partidos (Fútbol) pero podrían ser distintos
-        Deporte deporteFutbol = new Deporte("Futbol");
-
         // Crear jugadores con distintos niveles y zonas
-        Jugador lucas = new Jugador("Lucas", "lucas@example.com", "pass", new Habilidad(deporteFutbol, new Principiante()));
-        Jugador maria = new Jugador("Maria", "maria@example.com", "pass", new Habilidad(deporteFutbol, new Intermedio()));
-        Jugador pablo = new Jugador("Pablo", "pablo@example.com", "pass", new Habilidad(deporteFutbol, new Avanzado()));
-        Jugador sofia = new Jugador("Sofia", "sofia@example.com", "pass", new Habilidad(deporteFutbol, new Principiante()));
-        Jugador juan = new Jugador("Juan", "juan@example.com", "pass", new Habilidad(deporteFutbol, new Avanzado()));
+        Jugador lucas = new Jugador("Lucas", "lucas@example.com", "pass", new Habilidad(futbol, new Principiante()));
+        Jugador maria = new Jugador("Maria", "maria@example.com", "pass", new Habilidad(futbol, new Intermedio()));
+        Jugador pablo = new Jugador("Pablo", "pablo@example.com", "pass", new Habilidad(futbol, new Avanzado()));
+        Jugador sofia = new Jugador("Sofia", "sofia@example.com", "pass", new Habilidad(futbol, new Principiante()));
+        Jugador juan = new Jugador("Juan", "juan@example.com", "pass", new Habilidad(futbol, new Avanzado()));
 
         sesion.registrar(lucas);
         sesion.registrar(maria);
@@ -98,23 +96,28 @@ public class Main{
 
         // Crear algunos partidos y configurarlos con zona y rango de niveles
         // Partido 1: organizado por Lucas en zona Norte, acepta cualquier nivel
-        Partido partido1 = gestor.crearPartido(lucas, deporteFutbol, 4);
+        Partido partido1 = gestor.crearPartido(lucas, futbol, 4);
         partido1.setUbicacion(zonaNorte);
         // rango completo: minimo principiante, máximo avanzado
-        partido1.setMinNivel(new com.example.model.strategy.tipoNivel.Principiante());
+        partido1.setMinNivel(new com.example.model.strategy.tipoNivel.Intermedio());
         partido1.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
         // Agregar un jugador invitado para simular cupo parcial
         partido1.agregarJugador(maria);
 
+        Partido partidoSoftball = gestor.crearPartido(lucas, softball, 4);
+        partido1.setMinNivel(new com.example.model.strategy.tipoNivel.Principiante());
+        partido1.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
+        com.example.model.entity.Historial.getInstance().registrarPartido(partidoSoftball);
+
         // Partido 2: organizado por Pablo en zona Sur, admite desde Intermedio en adelante
-        Partido partido2 = gestor.crearPartido(pablo, deporteFutbol, 4);
+        Partido partido2 = gestor.crearPartido(pablo, futbol, 4);
         partido2.setUbicacion(zonaSur);
         partido2.setMinNivel(new com.example.model.strategy.tipoNivel.Intermedio());
         partido2.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
         partido2.agregarJugador(sofia);
 
         // Partido 3: organizado por Juan en zona Norte, sólo avanzado
-        Partido partido3 = gestor.crearPartido(juan, deporteFutbol, 4);
+        Partido partido3 = gestor.crearPartido(juan, futbol, 4);
         partido3.setUbicacion(zonaNorte);
         partido3.setMinNivel(new com.example.model.strategy.tipoNivel.Avanzado());
         partido3.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
@@ -124,7 +127,7 @@ public class Main{
 
         // Crear partido 4: organizado por Maria en zona Norte, lo utilizaremos para
         // demostrar emparejamiento por historial (Lucas ha jugado con Maria)
-        Partido partido4 = gestor.crearPartido(maria, deporteFutbol, 4);
+        Partido partido4 = gestor.crearPartido(maria, futbol, 4);
         partido4.setUbicacion(zonaNorte);
         partido4.setMinNivel(new com.example.model.strategy.tipoNivel.Principiante());
         partido4.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());

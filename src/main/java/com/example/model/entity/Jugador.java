@@ -9,10 +9,9 @@ public class Jugador {
     private String nombre;
     private String mail;
     private String password;
-    private List<Habilidad> habilidad = new ArrayList<>();
+    private List<Habilidad> deportes = new ArrayList<>();
     private Habilidad deporteFavorito;
     private String pushToken;
-    private ITipoNivel nivel;
 
     public Jugador(String nombre, String mail, String password) {
         this.nombre = nombre;
@@ -24,7 +23,7 @@ public class Jugador {
         this.nombre = nombre;
         this.mail = mail;
         this.password = password;
-        this.deporteFavorito = deporteFavorito;
+        setDeporteFavorito(deporteFavorito);
     }
 
     public String getNombre() {
@@ -45,6 +44,11 @@ public class Jugador {
 
     public void setDeporteFavorito(Habilidad deporteFavorito) {
         this.deporteFavorito = deporteFavorito;
+        deportes.add(deporteFavorito);
+    }
+
+    public List<Habilidad> getDeportes() {
+        return deportes;
     }
 
     public String getPushToken() {
@@ -53,13 +57,5 @@ public class Jugador {
 
     public void setPushToken(String pushToken) {
         this.pushToken = pushToken;
-    }
-
-    public ITipoNivel getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(ITipoNivel nivel) {
-        this.nivel = nivel;
     }
 }
