@@ -43,15 +43,22 @@ public class Partido {
     private boolean terminadoConErrores;
     private final List<INotificationObserver> observers = new ArrayList<>();
 
-    /**
-     * Constructor principal. Establece el estado inicial en NecesitamosJugadores.
-     * El organizador se agrega automáticamente a la lista de jugadores.
-     */
     public Partido(Jugador organizador, Deporte deporte, int jugadoresRequeridos) {
         this.organizador = organizador;
         this.deporte = deporte;
         this.jugadoresRequeridos = jugadoresRequeridos;
         this.estado = new NecesitamosJugadores();
+        // El organizador se une automáticamente al partido
+        if (organizador != null) {
+            this.jugadores.add(organizador);
+        }
+    }
+    public Partido(Jugador organizador, Deporte deporte, int jugadoresRequeridos, Zona zona) {
+        this.organizador = organizador;
+        this.deporte = deporte;
+        this.jugadoresRequeridos = jugadoresRequeridos;
+        this.estado = new NecesitamosJugadores();
+        this.ubicacion = zona;
         // El organizador se une automáticamente al partido
         if (organizador != null) {
             this.jugadores.add(organizador);
@@ -90,6 +97,9 @@ public class Partido {
             if (!this.jugadoresConfirmados.contains(jugador)) {
                 this.jugadoresConfirmados.add(jugador);
             }
+        }
+        if (jugadores.size() == jugadoresConfirmados.size()) {
+            confirmar();
         }
     }
 
