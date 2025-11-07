@@ -83,6 +83,10 @@ public class Partido {
         if (this.estado != null) this.estado.confirmarPartido(this);
     }
 
+    public void enJuego() {
+        if (this.estado != null) this.estado.iniciarPartido(this);
+    }
+
     public void iniciar() {
         if (this.estado != null) this.estado.iniciarPartido(this);
     }
@@ -100,6 +104,8 @@ public class Partido {
         }
         if (jugadores.size() == jugadoresConfirmados.size()) {
             confirmar();
+            enJuego();
+            finalizar();
         }
     }
 
