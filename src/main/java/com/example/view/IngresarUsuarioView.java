@@ -16,11 +16,9 @@ public class IngresarUsuarioView extends View {
     public void mostrarIngreso() {
         AccesoDTO usuario = new AccesoDTO();
         System.out.println("\n--- Iniciar sesión ---");
-        System.out.print("Correo electrónico: ");
-        String mail = scanner.next().trim();
+        String mail = leerLinea("Correo electrónico: ");
         usuario.setMail(mail);
-        System.out.print("Contraseña: ");
-        String password = scanner.next().trim();
+        String password = leerLinea("Contraseña: ");
         usuario.setPassword(password);
         Jugador jugador = sesion.ingresar(usuario);
         if (jugador == null) {

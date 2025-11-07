@@ -104,8 +104,7 @@ public class MenuView extends View {
     private void crearPartido() {
         if (!verificarSesion()) return;
         System.out.println("\n--- Crear partido ---");
-        System.out.print("Deporte (ej. Futbol, Basquet): ");
-        String depName = scanner.next().trim();
+        String depName = leerLinea("Deporte (ej. Futbol, Basquet): ");
         Deporte deporte = new Deporte(depName);
         int jugadoresRequeridos = leerEntero("Cantidad de jugadores requeridos: ");
         Partido partido = gestor.crearPartido(usuarioActual, deporte, jugadoresRequeridos);
@@ -121,24 +120,26 @@ public class MenuView extends View {
         partido.setHorario(horario);
 
         // Solicitar ubicación (dirección/lugar específico)
-        System.out.print("Ubicación del encuentro (ej. Estadio Luna Park, Calle 123): ");
-        String ubicacionStr = scanner.next().trim();
+        String ubicacionStr = leerLinea("Ubicación del encuentro (ej. Estadio Luna Park, Calle 123): ");
 
         // Solicitar zona
-        System.out.print("Zona del encuentro (ej. Norte, Sur, Centro): ");
-        String zoneName = scanner.next().trim();
+        String zoneName = leerLinea("Zona del encuentro (ej. Norte, Sur, Centro): ");
 
         Zona zona = new Zona(zoneName);
         zona.setUbicacion(ubicacionStr);
         partido.setUbicacion(zona);
 
-        System.out.println("Configuración de niveles. Ingrese un valor entre 1 (Principiante) y 3 (Avanzado) o 0 para omitir.");
-        System.out.print("Nivel mínimo permitido: ");
-        int minVal = leerEntero();
-        if (minVal > 0) partido.setMinNivel(crearNivelDesdeValor(minVal));
-        System.out.print("Nivel máximo permitido: ");
-        int maxVal = leerEntero();
-        if (maxVal > 0) partido.setMaxNivel(crearNivelDesdeValor(maxVal));
+        // Preguntar si desea configurar niveles
+        String deseaConfig = leerLinea("¿Desea configurar el nivel? (s/n): ");
+        if (deseaConfig.equalsIgnoreCase("s") || deseaConfig.equalsIgnoreCase("si") || deseaConfig.equalsIgnoreCase("sí")) {
+            System.out.println("Configuración de niveles. Ingrese un valor entre 1 (Principiante) y 3 (Avanzado) o 0 para omitir.");
+            System.out.print("Nivel mínimo permitido: ");
+            int minVal = leerEntero();
+            if (minVal > 0) partido.setMinNivel(crearNivelDesdeValor(minVal));
+            System.out.print("Nivel máximo permitido: ");
+            int maxVal = leerEntero();
+            if (maxVal > 0) partido.setMaxNivel(crearNivelDesdeValor(maxVal));
+        }
         // Suscribir a notificaciones para que los participantes reciban avisos de cambios
         partido.addObserver(notificationService);
         System.out.println("Partido creado correctamente. Tú estás registrado como jugador (1/" + jugadoresRequeridos + ").");

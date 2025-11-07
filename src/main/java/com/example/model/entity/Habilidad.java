@@ -28,6 +28,10 @@ public class Habilidad {
         return nivel;
     }
 
+    public void setNivel(ITipoNivel nivel) {
+        this.nivel = nivel;
+    }
+
     public ITipoNivel seleccionarNivel(int val) {
         return switch (val) {
             case 1 -> new Principiante();

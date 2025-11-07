@@ -1,6 +1,7 @@
 package com.example.view;
 
 import com.example.model.entity.Habilidad;
+import com.example.model.entity.Deporte;
 import com.example.model.strategy.tipoNivel.ITipoNivel;
 
 import java.util.Scanner;
@@ -14,8 +15,8 @@ public class VistaAgregarHabilidad extends View {
     public void mostrarAgregarHabilidad() {
         habilidad = new Habilidad();
         // todo: listar deportes
-        System.out.print("Ingrese su deporte favortio: ");
-        String deporte = scanner.next();
+        String depNombre = leerLinea("Ingrese su deporte favortio: ");
+        habilidad.setDeporte(new Deporte(depNombre));
 
         seleccionarNivel();
     }
@@ -23,11 +24,12 @@ public class VistaAgregarHabilidad extends View {
     private void seleccionarNivel() {
         while (true) {
             System.out.print("Nivel (1=Principiante, 2=Intermedio, 3=Avanzado): ");
-            String input = scanner.next().trim();
+            String input = scanner.nextLine().trim();
             try {
                 int val = Integer.parseInt(input);
                 if (val >= 1 && val <= 3) {
-                    habilidad.seleccionarNivel(val);
+                    ITipoNivel nivel = habilidad.seleccionarNivel(val);
+                    habilidad.setNivel(nivel);
                     break;
                 }
             } catch (NumberFormatException e) {

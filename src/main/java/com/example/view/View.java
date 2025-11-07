@@ -21,7 +21,7 @@ public abstract class View {
 
     protected String seleccionarOpcion() {
         System.out.print("Seleccione una opcion: ");
-        String opcion = this.scanner.next();
+        String opcion = this.scanner.nextLine().trim();
         return opcion;
     }
 
@@ -34,6 +34,11 @@ public abstract class View {
 //        return opciones.get(opcion);
 //    }
 
+    protected String leerLinea(String mensaje) {
+        System.out.print(mensaje);
+        return scanner.nextLine().trim();
+    }
+
     protected int leerEntero(String mensaje) {
         System.out.print(mensaje);
         return leerEntero();
@@ -45,7 +50,7 @@ public abstract class View {
             try {
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.print("Entrada inválida. Por favor ingrese un número: ");
+                System.out.print("Por favor ingrese un número: ");
             }
         }
     }

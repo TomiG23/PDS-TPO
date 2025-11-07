@@ -13,6 +13,10 @@ public class MenuAcceso extends View {
     public void mostrarMenu() {
         mostrarOpcipnes(List.of("Salir", "Registrarse", "Ingresar"));
         String opcion = seleccionarOpcion();
+        if (opcion == null || opcion.isEmpty()) {
+            // Evitar mensaje de opción inválida por líneas vacías residuales
+            return;
+        }
         switch (opcion) {
             case "1" -> registrarUsuario();
             case "2" -> iniciarSesion();
