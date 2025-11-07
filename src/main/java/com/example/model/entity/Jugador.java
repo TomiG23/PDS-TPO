@@ -47,6 +47,12 @@ public class Jugador {
         deportes.add(deporteFavorito);
     }
 
+    public void agregarDeporte(Habilidad habilidad) {
+        if (!deportes.contains(habilidad)) {
+            this.deportes.add(habilidad);
+        }
+    }
+
     public List<Habilidad> getDeportes() {
         return deportes;
     }

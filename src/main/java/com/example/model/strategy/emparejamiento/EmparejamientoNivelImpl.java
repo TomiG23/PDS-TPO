@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmparejamientoNivelImpl implements IEmparejamientoEstrategia {
+    private boolean conoceDeporteDelPartido(List<Deporte> deportesJugador, Deporte deportePartido) {
+        return deportesJugador.stream().filter(habilidad -> habilidad.getTipo().getClass() == deportePartido.getClass()).count() > 0;
+    }
+
     @Override
     public List<Partido> emparejar(List<Partido> partidos, Jugador jugador) {
         List<Partido> out = new ArrayList<>();
@@ -21,7 +25,7 @@ public class EmparejamientoNivelImpl implements IEmparejamientoEstrategia {
         for (Partido partido : partidos) {
             Deporte partidoDeporte = partido.getDeporte();
 
-            if (deportesJugador.stream().map(Habilidad::getDeporte).toList().contains(partidoDeporte)) {
+            if (conoceDeporteDelPartido(deportesJugador.stream().map(Habilidad::getDeporte).toList(), partidoDeporte)) {
                 Integer index = deportesJugador.stream().map(Habilidad::getDeporte).toList().indexOf(partidoDeporte);
                 valorDeNivel = deportesJugador.get(index).getNivel().getValor();
             } else {

@@ -1,6 +1,9 @@
 package com.example;
 
 import com.example.model.entity.*;
+import com.example.model.strategy.tipoDeporte.tipoNivel.Basket;
+import com.example.model.strategy.tipoDeporte.tipoNivel.Futbol;
+import com.example.model.strategy.tipoDeporte.tipoNivel.Voley;
 import com.example.model.strategy.tipoNivel.Avanzado;
 import com.example.model.strategy.tipoNivel.Intermedio;
 import com.example.model.strategy.tipoNivel.Principiante;
@@ -19,9 +22,9 @@ public class Main{
         Sesion sesion = Sesion.getInstance();
 
         // Crear algunos usuarios
-        Deporte futbol = new Deporte("Futbol");
-        Deporte basket = new Deporte("Basquet");
-        Deporte softball = new Deporte("Softball");
+        Deporte futbol = new Deporte(new Futbol());
+        Deporte basket = new Deporte(new Basket());
+        Deporte voley = new Deporte(new Voley());
         Zona caba = new Zona();
 
         Jugador ana = new Jugador("Ana", "ana@example.com", "pass", new Habilidad(futbol, new Principiante()));
@@ -104,7 +107,7 @@ public class Main{
         // Agregar un jugador invitado para simular cupo parcial
         partido1.agregarJugador(maria);
 
-        Partido partidoSoftball = gestor.crearPartido(lucas, softball, 4);
+        Partido partidoSoftball = gestor.crearPartido(lucas, voley, 4);
         partido1.setMinNivel(new com.example.model.strategy.tipoNivel.Principiante());
         partido1.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
         com.example.model.entity.Historial.getInstance().registrarPartido(partidoSoftball);

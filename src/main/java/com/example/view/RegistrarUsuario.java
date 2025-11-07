@@ -18,7 +18,7 @@ public class RegistrarUsuario extends View {
         String nombre;
         while (true) {
             System.out.print("Nombre (o presione 0 para salir): ");
-            nombre = scanner.nextLine().trim();
+            nombre = scanner.next().trim();
             if (nombre.equals("0")) {
                 System.out.println("Registro cancelado.");
                 return;
@@ -34,7 +34,7 @@ public class RegistrarUsuario extends View {
         String email;
         while (true) {
             System.out.print("Correo electrónico (o presione 0 para salir): ");
-            email = scanner.nextLine().trim();
+            email = scanner.next().trim();
             if (email.equals("0")) {
                 System.out.println("Registro cancelado.");
                 return;
@@ -55,7 +55,7 @@ public class RegistrarUsuario extends View {
         String password;
         while (true) {
             System.out.print("Contraseña (mínimo 3 caracteres, o presione 0 para salir): ");
-            password = scanner.nextLine().trim();
+            password = scanner.next().trim();
             if (password.equals("0")) {
                 System.out.println("Registro cancelado.");
                 return;
@@ -75,7 +75,7 @@ public class RegistrarUsuario extends View {
         String tieneFavorito;
         while (true) {
             System.out.print("¿Desea agregar su deporte favorito? (s/n, o presione 0 para salir): ");
-            tieneFavorito = scanner.nextLine().trim().toLowerCase();
+            tieneFavorito = scanner.next().trim().toLowerCase();
             if (tieneFavorito.equals("0")) {
                 System.out.println("Registro cancelado.");
                 return;

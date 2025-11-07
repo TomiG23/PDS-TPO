@@ -8,6 +8,7 @@ import com.example.model.strategy.emparejamiento.EmparejamientoNivelImpl;
 import com.example.model.strategy.emparejamiento.EmparejamientoZonaNivelCustomImpl;
 import com.example.model.strategy.emparejamiento.GestorEmparejamiento;
 // import com.example.model.strategy.tipoNivel.Avanzado;
+import com.example.model.strategy.tipoDeporte.tipoNivel.ITipoDeporte;
 import com.example.model.strategy.tipoNivel.Avanzado;
 import com.example.model.strategy.tipoNivel.Intermedio;
 import com.example.model.strategy.tipoNivel.ITipoNivel;
@@ -104,8 +105,9 @@ public class MenuView extends View {
     private void crearPartido() {
         if (!verificarSesion()) return;
         System.out.println("\n--- Crear partido ---");
-        String depName = leerLinea("Deporte (ej. Futbol, Basquet): ");
-        Deporte deporte = new Deporte(depName);
+        VistaAgregarHabilidad vistaAgregarHabilidad = new VistaAgregarHabilidad(scanner);
+        ITipoDeporte tipoDeporte = vistaAgregarHabilidad.leerDeportes();
+        Deporte deporte = new Deporte(tipoDeporte);
         int jugadoresRequeridos = leerEntero("Cantidad de jugadores requeridos: ");
         Partido partido = gestor.crearPartido(usuarioActual, deporte, jugadoresRequeridos);
 
@@ -159,7 +161,7 @@ public class MenuView extends View {
         System.out.println("3. Por historial");
         System.out.println("4. Sin filtro");
         System.out.print("Opción: ");
-        String op = scanner.nextLine().trim();
+        String op = scanner.next().trim();
         switch (op) {
             case "1" -> {
                 // Obtener zonas únicas de los partidos disponibles
@@ -380,7 +382,9 @@ public class MenuView extends View {
     }
 
     private void agregarHabilidad() {
-        // todo agregar habilidad
+        VistaAgregarHabilidad vistaAgregarHabilidad = new VistaAgregarHabilidad(scanner);
+        vistaAgregarHabilidad.mostrarAgregarHabilidad();
+        usuarioActual.agregarDeporte(vistaAgregarHabilidad.getHabilidad());
     }
 
     // Utilidades
@@ -431,7 +435,7 @@ public class MenuView extends View {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         while (true) {
             System.out.print("Fecha del partido (formato dd/MM/yyyy, ej. 25/12/2024): ");
-            String input = scanner.nextLine().trim();
+            String input = scanner.next().trim();
             try {
                 return LocalDate.parse(input, formatter);
             } catch (DateTimeParseException e) {
@@ -444,7 +448,7 @@ public class MenuView extends View {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         while (true) {
             System.out.print("Horario del partido (formato HH:mm, ej. 18:30): ");
-            String input = scanner.nextLine().trim();
+            String input = scanner.next().trim();
             try {
                 return LocalTime.parse(input, formatter);
             } catch (DateTimeParseException e) {

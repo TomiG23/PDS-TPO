@@ -1,14 +1,23 @@
 package com.example.model.entity;
 
+import com.example.model.strategy.tipoDeporte.tipoNivel.ITipoDeporte;
+
 public class Deporte {
-    private String nombre;
-    public Deporte(String nombre) {
-        this.nombre = nombre;
+    private ITipoDeporte tipoDeporte;
+    public Deporte(ITipoDeporte tipoDeporte) {
+        establecerTipo(tipoDeporte);
     }
     public String getNombre() {
-        return nombre;
+        return this.tipoDeporte.verTipo();
     }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public ITipoDeporte getTipo() {
+        return tipoDeporte;
+    }
+    private void establecerTipo(ITipoDeporte tipoDeporte) {
+        this.tipoDeporte = tipoDeporte;
+    };
+
+    public Deporte getDeporte() {
+        return null;
     }
 }

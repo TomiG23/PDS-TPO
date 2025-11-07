@@ -21,7 +21,7 @@ public abstract class View {
 
     protected String seleccionarOpcion() {
         System.out.print("Seleccione una opcion: ");
-        String opcion = this.scanner.nextLine().trim();
+        String opcion = this.scanner.next().trim();
         return opcion;
     }
 
@@ -34,9 +34,24 @@ public abstract class View {
 //        return opciones.get(opcion);
 //    }
 
+    protected int leerOpciones(String mensaje, int min, int max) {
+        System.out.print(mensaje);
+        while (true) {
+            String input = scanner.next().trim();
+            try {
+                int res = Integer.parseInt(input);
+                if (res >= min && res <= max) {
+                    return res;
+                }
+            } catch (NumberFormatException e) {
+                System.out.print("Por favor ingrese un número: ");
+            }
+        }
+    }
+
     protected String leerLinea(String mensaje) {
         System.out.print(mensaje);
-        return scanner.nextLine().trim();
+        return scanner.next().trim();
     }
 
     protected int leerEntero(String mensaje) {
@@ -46,7 +61,7 @@ public abstract class View {
 
     protected int leerEntero() {
         while (true) {
-            String input = scanner.nextLine().trim();
+            String input = scanner.next().trim();
             try {
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
