@@ -39,18 +39,19 @@ public class Main{
         sesion.registrar(caro);
 
         // Configurar estrategias y adaptadores
-        NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
-        NotificationStrategy push = new PushNotificationStrategy(new FirebasePushClientAdapter());
+        // COMENTADO: NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
+        // COMENTADO: NotificationStrategy push = new PushNotificationStrategy(new FirebasePushClientAdapter());
 
-        NotificationService notificationService = new NotificationService(email, push);
+        // COMENTADO: NotificationService notificationService = new NotificationService(email, push);
+        NotificationService notificationService = null; // Deshabilitado para tests
 
         // Crear partido de Futbol requiriendo 2 jugadores
         Jugador organizador = ana;
         Partido partido = new Partido(organizador, futbol, 2);
-        partido.addObserver(notificationService);
+        // COMENTADO: partido.addObserver(notificationService);
 
         System.out.println("-- Publicando creación de partido --");
-        partido.publicarCreacion(); // Envía emails a todos con Futbol como favorito
+        // COMENTADO: partido.publicarCreacion(); // Envía emails a todos con Futbol como favorito
 
         System.out.println("-- Agregando jugador Bruno --");
         partido.agregarJugador(bruno); // aún no arma partido si requiere 2 y solo hay 1
@@ -100,7 +101,7 @@ public class Main{
         // Crear algunos partidos y configurarlos con zona y rango de niveles
         // Partido 1: organizado por Lucas en zona Norte, acepta cualquier nivel
         Partido partido1 = gestor.crearPartido(lucas, futbol, 4);
-        partido1.addObserver(notificationService); // Suscribir para notificaciones
+        // COMENTADO: partido1.addObserver(notificationService); // Suscribir para notificaciones
         partido1.setUbicacion(zonaNorte);
         // rango completo: minimo principiante, máximo avanzado
         partido1.setMinNivel(new com.example.model.strategy.tipoNivel.Intermedio());
@@ -109,14 +110,14 @@ public class Main{
         partido1.agregarJugador(maria);
 
         Partido partidoSoftball = gestor.crearPartido(lucas, voley, 4);
-        partidoSoftball.addObserver(notificationService); // Suscribir para notificaciones
+        // COMENTADO: partidoSoftball.addObserver(notificationService); // Suscribir para notificaciones
         partido1.setMinNivel(new com.example.model.strategy.tipoNivel.Principiante());
         partido1.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
         com.example.model.entity.Historial.getInstance().registrarPartido(partidoSoftball);
 
         // Partido 2: organizado por Pablo en zona Sur, admite desde Intermedio en adelante
         Partido partido2 = gestor.crearPartido(pablo, futbol, 4);
-        partido2.addObserver(notificationService); // Suscribir para notificaciones
+        // COMENTADO: partido2.addObserver(notificationService); // Suscribir para notificaciones
         partido2.setUbicacion(zonaSur);
         partido2.setMinNivel(new com.example.model.strategy.tipoNivel.Intermedio());
         partido2.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
@@ -124,7 +125,7 @@ public class Main{
 
         // Partido 3: organizado por Juan en zona Norte, sólo avanzado
         Partido partido3 = gestor.crearPartido(juan, futbol, 4);
-        partido3.addObserver(notificationService); // Suscribir para notificaciones
+        // COMENTADO: partido3.addObserver(notificationService); // Suscribir para notificaciones
         partido3.setUbicacion(zonaNorte);
         partido3.setMinNivel(new com.example.model.strategy.tipoNivel.Avanzado());
         partido3.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
@@ -135,7 +136,7 @@ public class Main{
         // Crear partido 4: organizado por Maria en zona Norte, lo utilizaremos para
         // demostrar emparejamiento por historial (Lucas ha jugado con Maria)
         Partido partido4 = gestor.crearPartido(maria, futbol, 4);
-        partido4.addObserver(notificationService); // Suscribir para notificaciones
+        // COMENTADO: partido4.addObserver(notificationService); // Suscribir para notificaciones
         partido4.setUbicacion(zonaNorte);
         partido4.setMinNivel(new com.example.model.strategy.tipoNivel.Principiante());
         partido4.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
@@ -170,7 +171,8 @@ public class Main{
 
         System.out.println("==== FIN DEMO ESTRATEGIAS ====");
 
-        MenuView menu = new MenuView(notificationService);
+        // COMENTADO: MenuView menu = new MenuView(notificationService);
+        MenuView menu = new MenuView(); // Sin notificaciones para tests
         menu.run();
     }
 }

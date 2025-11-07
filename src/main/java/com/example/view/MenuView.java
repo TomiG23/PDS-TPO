@@ -154,11 +154,11 @@ public class MenuView extends View {
             if (maxVal > 0) partido.setMaxNivel(crearNivelDesdeValor(maxVal));
         }
         // Suscribir a notificaciones para que los participantes reciban avisos de cambios
-        partido.addObserver(notificationService);
+        // COMENTADO: partido.addObserver(notificationService);
         System.out.println("Partido creado correctamente. Tú estás registrado como jugador (1/" + jugadoresRequeridos + ").");
         
         // Disparar evento de creación para enviar notificaciones
-        partido.publicarCreacion();
+        // COMENTADO: partido.publicarCreacion();
     }
 
     /**
