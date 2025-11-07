@@ -39,28 +39,27 @@ public class NotificationService implements INotificationObserver {
 
     private List<Jugador> recipientsFor(String eventName, Partido partido) {
         List<Jugador> result = new ArrayList<>();
-        switch (eventName) {
-            case PartidoEvents.PARTIDO_CREADO -> {
-                // Notificar a usuarios cuyo deporte favorito coincide
-                Deporte dep = partido.getDeporte();
-                String nombreDep = dep != null ? dep.getNombre() : null;
-                if (sesion != null && nombreDep != null) {
-                    for (Jugador j : sesion.getAllJugadores()) {
-                        if (j != null && j.getDeporteFavorito() != null &&
-                                Objects.equals(nombreDep, j.getDeporteFavorito().getNombre())) {
-                            result.add(j);
-                        }
+        
+        if (PartidoEvents.PARTIDO_CREADO.equals(eventName)) {
+            // Notificar a usuarios cuyo deporte favorito coincide
+            Deporte dep = partido.getDeporte();
+            String nombreDep = dep != null ? dep.getNombre() : null;
+            if (sesion != null && nombreDep != null) {
+                for (Jugador j : sesion.getAllJugadores()) {
+                    if (j != null && j.getDeporteFavorito() != null &&
+                            Objects.equals(nombreDep, j.getDeporteFavorito().getNombre())) {
+                        result.add(j);
                     }
                 }
             }
-            default -> {
-                // Notificar a organizador + jugadores del partido
-                Set<Jugador> set = new HashSet<>();
-                if (partido.getOrganizador() != null) set.add(partido.getOrganizador());
-                if (partido.getJugadores() != null) set.addAll(partido.getJugadores());
-                result.addAll(set);
-            }
+        } else {
+            // Para todos los demás eventos: notificar a organizador + jugadores del partido
+            Set<Jugador> set = new HashSet<>();
+            if (partido.getOrganizador() != null) set.add(partido.getOrganizador());
+            if (partido.getJugadores() != null) set.addAll(partido.getJugadores());
+            result.addAll(set);
         }
+        
         return result;
     }
 

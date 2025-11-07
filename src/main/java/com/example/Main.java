@@ -29,9 +29,9 @@ public class Main{
 
         Jugador ana = new Jugador("Ana", "ana@example.com", "pass", new Habilidad(futbol, new Principiante()));
         ana.setPushToken("token-ANA");
-        Jugador bruno = new Jugador("Bruno", "bruno@example.com", "pass", new Habilidad(futbol, new Principiante()));
+        Jugador bruno = new Jugador("Bruno", "micaela.palomino@gmail.com", "pass", new Habilidad(futbol, new Principiante()));
         bruno.setPushToken("token-BRUNO");
-        Jugador caro = new Jugador("Caro", "caro@example.com", "pass", new Habilidad(futbol, new Principiante()));
+        Jugador caro = new Jugador("Caro", "tytoapache@gmail.com", "pass", new Habilidad(futbol, new Principiante()));
         caro.setPushToken("token-CARO");
 
         sesion.registrar(ana);
@@ -50,7 +50,7 @@ public class Main{
         partido.addObserver(notificationService);
 
         System.out.println("-- Publicando creación de partido --");
-        partido.publicarCreacion();
+        partido.publicarCreacion(); // Envía emails a todos con Futbol como favorito
 
         System.out.println("-- Agregando jugador Bruno --");
         partido.agregarJugador(bruno); // aún no arma partido si requiere 2 y solo hay 1
@@ -84,8 +84,8 @@ public class Main{
         Jugador lucas = new Jugador("Lucas", "lucas@example.com", "pass", new Habilidad(futbol, new Principiante()));
         Jugador maria = new Jugador("Maria", "maria@example.com", "pass", new Habilidad(futbol, new Intermedio()));
         Jugador pablo = new Jugador("Pablo", "pablo@example.com", "pass", new Habilidad(futbol, new Avanzado()));
-        Jugador sofia = new Jugador("Sofia", "sofia@example.com", "pass", new Habilidad(futbol, new Principiante()));
-        Jugador juan = new Jugador("Juan", "juan@example.com", "pass", new Habilidad(futbol, new Avanzado()));
+        Jugador sofia = new Jugador("Sofia", "tomasgoncalves123@gmail.com", "pass", new Habilidad(futbol, new Principiante()));
+        Jugador juan = new Jugador("HOLA", "HOLA@example.com", "pass", new Habilidad(futbol, new Avanzado()));
 
         sesion.registrar(lucas);
         sesion.registrar(maria);
@@ -100,6 +100,7 @@ public class Main{
         // Crear algunos partidos y configurarlos con zona y rango de niveles
         // Partido 1: organizado por Lucas en zona Norte, acepta cualquier nivel
         Partido partido1 = gestor.crearPartido(lucas, futbol, 4);
+        partido1.addObserver(notificationService); // Suscribir para notificaciones
         partido1.setUbicacion(zonaNorte);
         // rango completo: minimo principiante, máximo avanzado
         partido1.setMinNivel(new com.example.model.strategy.tipoNivel.Intermedio());
@@ -108,12 +109,14 @@ public class Main{
         partido1.agregarJugador(maria);
 
         Partido partidoSoftball = gestor.crearPartido(lucas, voley, 4);
+        partidoSoftball.addObserver(notificationService); // Suscribir para notificaciones
         partido1.setMinNivel(new com.example.model.strategy.tipoNivel.Principiante());
         partido1.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
         com.example.model.entity.Historial.getInstance().registrarPartido(partidoSoftball);
 
         // Partido 2: organizado por Pablo en zona Sur, admite desde Intermedio en adelante
         Partido partido2 = gestor.crearPartido(pablo, futbol, 4);
+        partido2.addObserver(notificationService); // Suscribir para notificaciones
         partido2.setUbicacion(zonaSur);
         partido2.setMinNivel(new com.example.model.strategy.tipoNivel.Intermedio());
         partido2.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
@@ -121,6 +124,7 @@ public class Main{
 
         // Partido 3: organizado por Juan en zona Norte, sólo avanzado
         Partido partido3 = gestor.crearPartido(juan, futbol, 4);
+        partido3.addObserver(notificationService); // Suscribir para notificaciones
         partido3.setUbicacion(zonaNorte);
         partido3.setMinNivel(new com.example.model.strategy.tipoNivel.Avanzado());
         partido3.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
@@ -131,6 +135,7 @@ public class Main{
         // Crear partido 4: organizado por Maria en zona Norte, lo utilizaremos para
         // demostrar emparejamiento por historial (Lucas ha jugado con Maria)
         Partido partido4 = gestor.crearPartido(maria, futbol, 4);
+        partido4.addObserver(notificationService); // Suscribir para notificaciones
         partido4.setUbicacion(zonaNorte);
         partido4.setMinNivel(new com.example.model.strategy.tipoNivel.Principiante());
         partido4.setMaxNivel(new com.example.model.strategy.tipoNivel.Avanzado());
@@ -165,7 +170,7 @@ public class Main{
 
         System.out.println("==== FIN DEMO ESTRATEGIAS ====");
 
-        MenuView menu = new MenuView();
+        MenuView menu = new MenuView(notificationService);
         menu.run();
     }
 }

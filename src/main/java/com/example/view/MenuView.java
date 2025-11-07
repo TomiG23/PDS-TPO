@@ -61,6 +61,17 @@ public class MenuView extends View {
     }
 
     /**
+     * Constructor que acepta un NotificationService ya configurado.
+     * Útil cuando se quiere compartir la misma instancia entre la demo y el menú.
+     */
+    public MenuView(NotificationService notificationService) {
+        super(new Scanner(System.in));
+        sesion = Sesion.getInstance();
+        this.notificationService = notificationService;
+        this.gestor = GestorEmparejamiento.getInstance();
+    }
+
+    /**
      * Inicia el ciclo de ejecución del menú.  El método no retorna hasta
      * que el usuario seleccione la opción de salir.
      */
@@ -145,6 +156,9 @@ public class MenuView extends View {
         // Suscribir a notificaciones para que los participantes reciban avisos de cambios
         partido.addObserver(notificationService);
         System.out.println("Partido creado correctamente. Tú estás registrado como jugador (1/" + jugadoresRequeridos + ").");
+        
+        // Disparar evento de creación para enviar notificaciones
+        partido.publicarCreacion();
     }
 
     /**
