@@ -39,6 +39,9 @@ public class Jugador {
     }
 
     public Deporte getDeporteFavorito() {
+        if (deporteFavorito == null) {
+            return null;
+        }
         return deporteFavorito.getDeporte();
     }
 

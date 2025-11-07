@@ -52,6 +52,7 @@ public class NotificationService implements INotificationObserver {
                         }
                     }
                 }
+                // No ejecutar el default - solo notificar a quienes tienen este deporte favorito
             }
             default -> {
                 // Notificar a organizador + jugadores del partido

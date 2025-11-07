@@ -49,12 +49,25 @@ public class MenuView extends View {
      */
     private Jugador usuarioActual;
 
+    /**
+     * Constructor que recibe el servicio de notificaciones configurado.
+     * 
+     * @param notificationService El servicio de notificaciones ya configurado
+     */
+    public MenuView(NotificationService notificationService) {
+        super(new Scanner(System.in));
+        sesion = Sesion.getInstance();
+        this.notificationService = notificationService;
+        this.gestor = GestorEmparejamiento.getInstance();
+    }
+
+    /**
+     * Constructor sin argumentos (mantiene compatibilidad).
+     * Crea un NotificationService con estrategias nulas.
+     */
     public MenuView() {
         super(new Scanner(System.in));
         sesion = Sesion.getInstance();
-        // NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
-        // NotificationStrategy push = new PushNotificationStrategy(new FirebasePushClientAdapter());
-        // this.notificationService = new NotificationService(email, push);
         this.notificationService = new NotificationService(null, null);
         this.gestor = GestorEmparejamiento.getInstance();
     }
@@ -143,6 +156,9 @@ public class MenuView extends View {
         // Suscribir a notificaciones para que los participantes reciban avisos de cambios
         partido.addObserver(notificationService);
         System.out.println("Partido creado correctamente. Tú estás registrado como jugador (1/" + jugadoresRequeridos + ").");
+        
+        // Disparar el evento de creación DESPUÉS de mostrar el mensaje al usuario
+        partido.publicarCreacion();
     }
 
     /**

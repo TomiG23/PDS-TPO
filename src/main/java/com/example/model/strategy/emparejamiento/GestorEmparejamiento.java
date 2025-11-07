@@ -3,6 +3,7 @@ package com.example.model.strategy.emparejamiento;
 import com.example.model.entity.Deporte;
 import com.example.model.entity.Jugador;
 import com.example.model.entity.Partido;
+import com.example.notification.observer.INotificationObserver;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +44,12 @@ public class GestorEmparejamiento {
     private IEmparejamientoEstrategia estrategia;
 
     /**
+     * Observer de notificaciones que se suscribirá automáticamente
+     * a todos los partidos creados a través de este gestor.
+     */
+    private INotificationObserver notificationObserver;
+
+    /**
      * Constructor privado para evitar instanciación externa.  Utilizar
      * {@link #getInstance()} para obtener el gestor.
      */
@@ -71,14 +78,28 @@ public class GestorEmparejamiento {
     }
 
     /**
+     * Establece el observer de notificaciones que se suscribirá automáticamente
+     * a todos los partidos creados.
+     *
+     * @param observer el observer de notificaciones
+     */
+    public void setNotificationObserver(INotificationObserver observer) {
+        this.notificationObserver = observer;
+    }
+
+    /**
      * Agrega un partido existente al listado gestionado.  Si el argumento
-     * es {@code null} no se realiza ninguna acción.
+     * es {@code null} no se realiza ninguna acción. Si hay un notification
+     * observer configurado, se suscribe automáticamente al partido.
      *
      * @param partido partido a almacenar
      */
     public void agregarPartido(Partido partido) {
         if (partido != null) {
             this.partidos.add(partido);
+            if (notificationObserver != null) {
+                partido.addObserver(notificationObserver);
+            }
         }
     }
 
@@ -86,7 +107,11 @@ public class GestorEmparejamiento {
      * Crea un nuevo partido a partir de los parámetros proporcionados,
      * lo almacena internamente y lo devuelve al invocante.  El partido se
      * inicializa en el estado "Necesitamos jugadores" según la lógica
-     * definida en la clase {@link Partido}.
+     * definida en la clase {@link Partido}. Si hay un notification observer
+     * configurado, se suscribe automáticamente al partido.
+     * 
+     * NOTA: El evento PARTIDO_CREADO debe ser disparado manualmente llamando
+     * a partido.publicarCreacion() después de configurar todos los datos.
      *
      * @param organizador jugador que organiza el encuentro
      * @param deporte     deporte del partido
@@ -97,6 +122,8 @@ public class GestorEmparejamiento {
     public Partido crearPartido(Jugador organizador, Deporte deporte, int jugadoresRequeridos) {
         Partido partido = new Partido(organizador, deporte, jugadoresRequeridos);
         agregarPartido(partido);
+        // No disparar el evento aquí - se debe llamar manualmente después
+        // de mostrar el mensaje al usuario para mejor UX
         return partido;
     }
 
