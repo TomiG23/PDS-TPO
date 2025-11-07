@@ -9,10 +9,11 @@ import com.example.model.strategy.tipoNivel.Principiante;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EmparejamientoNivelImpl implements IEmparejamientoEstrategia {
-    private boolean conoceDeporteDelPartido(List<Deporte> deportesJugador, Deporte deportePartido) {
-        return deportesJugador.stream().filter(habilidad -> habilidad.getTipo().getClass() == deportePartido.getClass()).count() > 0;
+    private Optional<Deporte> conoceDeporteDelPartido(List<Deporte> deportesJugador, Deporte deportePartido) {
+        return deportesJugador.stream().filter(habilidad -> habilidad.getTipo().getClass() == deportePartido.getTipo().getClass()).findFirst();
     }
 
     @Override
@@ -24,9 +25,9 @@ public class EmparejamientoNivelImpl implements IEmparejamientoEstrategia {
         List<Habilidad> deportesJugador = jugador.getDeportes();
         for (Partido partido : partidos) {
             Deporte partidoDeporte = partido.getDeporte();
-
-            if (conoceDeporteDelPartido(deportesJugador.stream().map(Habilidad::getDeporte).toList(), partidoDeporte)) {
-                Integer index = deportesJugador.stream().map(Habilidad::getDeporte).toList().indexOf(partidoDeporte);
+            Optional<Deporte> deporteConocido = conoceDeporteDelPartido(deportesJugador.stream().map(Habilidad::getDeporte).toList(), partidoDeporte);
+            if (!deporteConocido.isEmpty()) {
+                int index = deportesJugador.stream().map(Habilidad::getDeporte).toList().indexOf(deporteConocido.get());
                 valorDeNivel = deportesJugador.get(index).getNivel().getValor();
             } else {
                 valorDeNivel = new Principiante().getValor();

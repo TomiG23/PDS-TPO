@@ -119,7 +119,7 @@ public class MenuView extends View {
         VistaAgregarHabilidad vistaAgregarHabilidad = new VistaAgregarHabilidad(scanner);
         ITipoDeporte tipoDeporte = vistaAgregarHabilidad.leerDeportes();
         Deporte deporte = new Deporte(tipoDeporte);
-        int jugadoresRequeridos = leerEntero("Cantidad de jugadores requeridos: ");
+        int jugadoresRequeridos = leerOpciones("Cantidad de jugadores requeridos (2 a 15): ", 2, 15);
         Partido partido = gestor.crearPartido(usuarioActual, deporte, jugadoresRequeridos);
 
         // Solicitar fecha

@@ -25,15 +25,6 @@ public abstract class View {
         return opcion;
     }
 
-//    protected String seleccionarOpcion(ArrayList<String> opciones) {
-//        System.out.print("Seleccione el numero de partido: ");
-//        int opcion = this.scanner.nextInt();
-//        if (opcion < 0 || opcion > opciones.size()) {
-//            System.out.println(); // todo: manejo de error
-//        }
-//        return opciones.get(opcion);
-//    }
-
     protected int leerOpciones(String mensaje, int min, int max) {
         System.out.print(mensaje);
         while (true) {
@@ -43,6 +34,7 @@ public abstract class View {
                 if (res >= min && res <= max) {
                     return res;
                 }
+                System.out.print("Error debe ser entre " + min + " y " + max + ". Ingrese nuevamente: ");
             } catch (NumberFormatException e) {
                 System.out.print("Por favor ingrese un número: ");
             }
@@ -51,7 +43,8 @@ public abstract class View {
 
     protected String leerLinea(String mensaje) {
         System.out.print(mensaje);
-        return scanner.next().trim();
+        String input = scanner.next().trim();
+        return input;
     }
 
     protected int leerEntero(String mensaje) {

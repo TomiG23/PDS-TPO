@@ -7,6 +7,7 @@ import com.example.model.strategy.tipoNivel.Principiante;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Estrategia de emparejamiento que filtra partidos por una zona específica Y nivel del jugador.
@@ -18,6 +19,10 @@ public class EmparejamientoZonaNivelCustomImpl implements IEmparejamientoEstrate
     public EmparejamientoZonaNivelCustomImpl(Zona zonaCustom) {
         this.zonaCustom = zonaCustom;
     }
+
+    private Optional<Deporte> conoceDeporteDelPartido(List<Deporte> deportesJugador, Deporte deportePartido) {
+        return deportesJugador.stream().filter(habilidad -> habilidad.getTipo().getClass() == deportePartido.getTipo().getClass()).findFirst();
+    }
     
     @Override
     public List<Partido> emparejar(List<Partido> partidos, Jugador jugador) {
@@ -27,7 +32,7 @@ public class EmparejamientoZonaNivelCustomImpl implements IEmparejamientoEstrate
         String zonaBuscada = zonaCustom != null ? zonaCustom.getNombre() : null;
 
         List<Habilidad> deportesJugador = jugador.getDeportes();
-
+        Integer valorDeNivel;
         for (Partido p : partidos) {
             // Verificar zona
             String zonaPartido = p.getUbicacion() != null ? p.getUbicacion().getNombre() : null;
@@ -36,10 +41,10 @@ public class EmparejamientoZonaNivelCustomImpl implements IEmparejamientoEstrate
             }
             
             Deporte partidoDeporte = p.getDeporte();
-            Integer valorDeNivel = null;
+            Optional<Deporte> deporteConocido = conoceDeporteDelPartido(deportesJugador.stream().map(Habilidad::getDeporte).toList(), partidoDeporte);
 
-            if (deportesJugador.stream().map(Habilidad::getDeporte).toList().contains(partidoDeporte)) {
-                Integer index = deportesJugador.stream().map(Habilidad::getDeporte).toList().indexOf(partidoDeporte);
+            if (!deporteConocido.isEmpty()) {
+                int index = deportesJugador.stream().map(Habilidad::getDeporte).toList().indexOf(deporteConocido.get());
                 valorDeNivel = deportesJugador.get(index).getNivel().getValor();
             } else {
                 valorDeNivel = new Principiante().getValor();

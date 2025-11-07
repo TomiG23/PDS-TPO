@@ -27,7 +27,7 @@ public class Main{
         Deporte voley = new Deporte(new Voley());
         Zona caba = new Zona();
 
-        Jugador ana = new Jugador("Ana", "ana@example.com", "pass", new Habilidad(futbol, new Principiante()));
+        Jugador ana = new Jugador("Ana", "ana@example.com", "pass", new Habilidad(basket, new Principiante()));
         ana.setPushToken("token-ANA");
         Jugador bruno = new Jugador("Bruno", "micaela.palomino@gmail.com", "pass", new Habilidad(futbol, new Principiante()));
         bruno.setPushToken("token-BRUNO");
