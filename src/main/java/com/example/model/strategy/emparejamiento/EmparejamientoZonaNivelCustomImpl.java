@@ -1,9 +1,8 @@
 package com.example.model.strategy.emparejamiento;
 
-import com.example.model.entity.Jugador;
-import com.example.model.entity.Partido;
-import com.example.model.entity.Zona;
+import com.example.model.entity.*;
 import com.example.model.strategy.tipoNivel.ITipoNivel;
+import com.example.model.strategy.tipoNivel.Principiante;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +25,9 @@ public class EmparejamientoZonaNivelCustomImpl implements IEmparejamientoEstrate
         if (partidos == null || jugador == null) return out;
         
         String zonaBuscada = zonaCustom != null ? zonaCustom.getNombre() : null;
-        ITipoNivel nivelJ = jugador.getNivel();
-        Integer valJ = (nivelJ != null) ? nivelJ.getValor() : null;
-        
+
+        List<Habilidad> deportesJugador = jugador.getDeportes();
+
         for (Partido p : partidos) {
             // Verificar zona
             String zonaPartido = p.getUbicacion() != null ? p.getUbicacion().getNombre() : null;
@@ -36,19 +35,29 @@ public class EmparejamientoZonaNivelCustomImpl implements IEmparejamientoEstrate
                 continue; // No es de la zona buscada, saltar
             }
             
+            Deporte partidoDeporte = p.getDeporte();
+            Integer valorDeNivel = null;
+
+            if (deportesJugador.stream().map(Habilidad::getDeporte).toList().contains(partidoDeporte)) {
+                Integer index = deportesJugador.stream().map(Habilidad::getDeporte).toList().indexOf(partidoDeporte);
+                valorDeNivel = deportesJugador.get(index).getNivel().getValor();
+            } else {
+                valorDeNivel = new Principiante().getValor();
+            }
+            
             // Verificar nivel
             ITipoNivel min = p.getMinNivel();
             ITipoNivel max = p.getMaxNivel();
             boolean nivelOk = true;
             
-            if (min != null && valJ != null) {
-                nivelOk &= valJ >= min.getValor();
+            if (min != null && valorDeNivel != null) {
+                nivelOk &= valorDeNivel >= min.getValor();
             }
-            if (max != null && valJ != null) {
-                nivelOk &= valJ <= max.getValor();
+            if (max != null && valorDeNivel != null) {
+                nivelOk &= valorDeNivel <= max.getValor();
             }
             // Si jugador no tiene nivel y el partido exige min/max, no lo incluimos
-            if (valJ == null && (min != null || max != null)) {
+            if (valorDeNivel == null && (min != null || max != null)) {
                 nivelOk = false;
             }
             

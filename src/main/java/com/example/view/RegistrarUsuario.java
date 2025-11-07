@@ -14,36 +14,85 @@ public class RegistrarUsuario extends View {
 
     public void mostarRegistro() {
         System.out.println("\n--- Registro de usuario ---");
-        System.out.print("Nombre: ");
-        String nombre = scanner.next().trim();
-
-        System.out.print("Correo electrónico: ");
-        String email = scanner.next().trim();
-        boolean estaMailOcupado = sesion.findByEmail(email) instanceof Jugador;
-        while (estaMailOcupado) {
-            System.out.print("Error: El mail ya se encuentra registrado\nIngrese otro email: ");
-            email = scanner.next().trim();
-            estaMailOcupado = sesion.findByEmail(email) instanceof Jugador;
+        // Validar nombre (no vacío)
+        String nombre;
+        while (true) {
+            System.out.print("Nombre (o presione 0 para salir): ");
+            nombre = scanner.nextLine().trim();
+            if (nombre.equals("0")) {
+                System.out.println("Registro cancelado.");
+                return;
+            }
+            if (nombre.isEmpty()) {
+                System.out.println("Error: El nombre no puede estar vacío.");
+                continue;
+            }
+            break;
         }
 
-        System.out.print("Contraseña (3 caracteres minimo): ");
-        String password = scanner.next().trim();
-        boolean esPassValida = password.length() >= 3;
-        while (!esPassValida) {
-            System.out.print("Error: La contraseña debe ser de al menos 3 caracteres\nIngrese nuevamente: ");
-            password = scanner.next().trim();
-            esPassValida = password.length() >= 3;
+        // Validar email (no vacío y no ocupado)
+        String email;
+        while (true) {
+            System.out.print("Correo electrónico (o presione 0 para salir): ");
+            email = scanner.nextLine().trim();
+            if (email.equals("0")) {
+                System.out.println("Registro cancelado.");
+                return;
+            }
+            if (email.isEmpty()) {
+                System.out.println("Error: El correo electrónico no puede estar vacío.");
+                continue;
+            }
+            boolean estaMailOcupado = sesion.findByEmail(email) instanceof Jugador;
+            if (estaMailOcupado) {
+                System.out.println("Error: El mail ya se encuentra registrado.");
+                continue;
+            }
+            break;
         }
 
+        // Validar contraseña (no vacía y al menos 3 caracteres)
+        String password;
+        while (true) {
+            System.out.print("Contraseña (mínimo 3 caracteres, o presione 0 para salir): ");
+            password = scanner.nextLine().trim();
+            if (password.equals("0")) {
+                System.out.println("Registro cancelado.");
+                return;
+            }
+            if (password.isEmpty()) {
+                System.out.println("Error: La contraseña no puede estar vacía.");
+                continue;
+            }
+            if (password.length() < 3) {
+                System.out.println("Error: La contraseña debe tener al menos 3 caracteres.");
+                continue;
+            }
+            break;
+        }
 
-        System.out.print("Desea agregar se deporte favorito?(s/n): ");
-        String tieneFavortio = scanner.next();
+        // Validar opción de deporte favorito (solo s o n)
+        String tieneFavorito;
+        while (true) {
+            System.out.print("¿Desea agregar su deporte favorito? (s/n, o presione 0 para salir): ");
+            tieneFavorito = scanner.nextLine().trim().toLowerCase();
+            if (tieneFavorito.equals("0")) {
+                System.out.println("Registro cancelado.");
+                return;
+            }
+            if (tieneFavorito.equals("s") || tieneFavorito.equals("n")) {
+                break;
+            }
+            System.out.println("Error: Opción incorrecta. Ingrese 's' para sí o 'n' para no.");
+        }
+
         Jugador jugador = new Jugador(nombre, email, password);
-        if (tieneFavortio.toLowerCase().equals("s")) {
+        if (tieneFavorito.equals("s")) {
             VistaAgregarHabilidad vistaAgregarHabilidad = new VistaAgregarHabilidad(scanner);
             vistaAgregarHabilidad.mostrarAgregarHabilidad();
             jugador.setDeporteFavorito(vistaAgregarHabilidad.getHabilidad());
         }
+        
         Jugador jugadorRegistrado = sesion.registrar(jugador);
         if (jugadorRegistrado == null) {
             System.out.println("No se pudo registrar el Usuario");

@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Zona {
     private String nombre;
     private String codigo;
+    private String ubicacion; // Dirección o lugar específico (ej. "Estadio Luna Park")
 
     public Zona() {}
 
@@ -31,6 +32,14 @@ public class Zona {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
     /**

@@ -31,6 +31,7 @@ public class Partido {
     private Deporte deporte;
     private Jugador organizador;
     private List<Jugador> jugadores = new ArrayList<>();
+    private List<Jugador> jugadoresConfirmados = new ArrayList<>();
     private int jugadoresRequeridos;
     private LocalDateTime duracionEncuentro; // DateTime
     private Zona ubicacion;
@@ -44,12 +45,17 @@ public class Partido {
 
     /**
      * Constructor principal. Establece el estado inicial en NecesitamosJugadores.
+     * El organizador se agrega automáticamente a la lista de jugadores.
      */
     public Partido(Jugador organizador, Deporte deporte, int jugadoresRequeridos) {
         this.organizador = organizador;
         this.deporte = deporte;
         this.jugadoresRequeridos = jugadoresRequeridos;
         this.estado = new NecesitamosJugadores();
+        // El organizador se une automáticamente al partido
+        if (organizador != null) {
+            this.jugadores.add(organizador);
+        }
     }
 
     // Métodos del patrón State (delegación)
@@ -76,6 +82,15 @@ public class Partido {
 
     public void finalizar() {
         if (this.estado != null) this.estado.finalizarPartido(this);
+    }
+
+    public void confirmarAsistencia(Jugador jugador) {
+        if (jugador == null) return;
+        if (this.jugadores != null && this.jugadores.contains(jugador)) {
+            if (!this.jugadoresConfirmados.contains(jugador)) {
+                this.jugadoresConfirmados.add(jugador);
+            }
+        }
     }
 
     // Métodos de gestión del estado
