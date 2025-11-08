@@ -21,7 +21,6 @@ public class MenuAcciones extends View {
                     isActive = false;
                     break;
                 case "1":
-                    // todo cambiar a configurar partido si hay un partido creado por el usuario
                     MenuCrearPartido menuCrearPartido = new MenuCrearPartido(scanner);
                     menuCrearPartido.mostrarCreacion();
                     break;

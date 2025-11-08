@@ -3,14 +3,11 @@ package com.example.util;
 import com.example.model.entity.Ubicacion;
 
 public class CalculadoraDistancias {
-    // Radio de la Tierra en kilómetros
     private static final double RADIO_TIERRA_KM = 6371.0;
     
-    // Radio máximo para considerar coincidencia (3km)
     public static final double RADIO_MAXIMO_KM = 3.0;
     
     private CalculadoraDistancias() {
-        // Constructor privado para evitar instanciación
     }
     
     /**

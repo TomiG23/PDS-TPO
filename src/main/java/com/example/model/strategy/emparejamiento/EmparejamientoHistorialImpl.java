@@ -14,7 +14,6 @@ public class EmparejamientoHistorialImpl implements IEmparejamientoEstrategia {
     public List<Partido> emparejar(List<Partido> partidos, Jugador jugador) {
         List<Partido> out = new ArrayList<>();
         if (partidos == null || jugador == null) return out;
-        // Obtenemos del historial los nombres de los jugadores con los que ya compartió un encuentro.
         Set<String> conocidos = Historial.getInstance().getNombresConocidos(jugador);
         for (Partido p : partidos) {
             Jugador org = p.getOrganizador();

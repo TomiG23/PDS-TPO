@@ -48,7 +48,6 @@ public class Partido {
         this.deporte = deporte;
         this.jugadoresRequeridos = jugadoresRequeridos;
         this.estado = new NecesitamosJugadores();
-        // El organizador se une automáticamente al partido
         if (organizador != null) {
             this.jugadores.add(organizador);
         }
@@ -59,13 +58,11 @@ public class Partido {
         this.jugadoresRequeridos = jugadoresRequeridos;
         this.estado = new NecesitamosJugadores();
         this.ubicacion = zona;
-        // El organizador se une automáticamente al partido
         if (organizador != null) {
             this.jugadores.add(organizador);
         }
     }
 
-    // Métodos del patrón State (delegación)
     public void agregarJugador(Jugador jugador) {
         if (jugador != null) {
             this.jugadores.add(jugador);
@@ -109,7 +106,6 @@ public class Partido {
         }
     }
 
-    // Métodos de gestión del estado
     public void setEstado(IEstadoPartido estado) {
         System.out.println("[Partido] Transición de estado: " + (this.estado != null ? this.estado.getNombreEstado() : "<none>") + " -> " + (estado != null ? estado.getNombreEstado() : "<none>"));
         this.estado = estado;
@@ -125,14 +121,12 @@ public class Partido {
         return deporte;
     }
 
-    // Método de utilidad
     public String mostrarEstado() {
         String nombre = (estado != null) ? estado.getNombreEstado() : "SinEstado";
         System.out.println("Estado actual del partido: " + nombre);
         return nombre;
     }
 
-    // Observer API
     public void addObserver(INotificationObserver observer) {
         if (observer != null && !observers.contains(observer)) observers.add(observer);
     }
@@ -162,7 +156,6 @@ public class Partido {
         return null;
     }
 
-    // Disparar evento de creación manualmente tras construir y suscribir observers
     public void publicarCreacion() {
         notifyObservers(PartidoEvents.PARTIDO_CREADO);
     }

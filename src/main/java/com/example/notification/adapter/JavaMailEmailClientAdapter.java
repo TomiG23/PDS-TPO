@@ -9,7 +9,6 @@ public class JavaMailEmailClientAdapter implements EmailClient {
     private final Session session;
 
     public JavaMailEmailClientAdapter() {
-        // Configuración de Gmail SMTP
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -17,7 +16,7 @@ public class JavaMailEmailClientAdapter implements EmailClient {
         props.put("mail.smtp.port", "587");
 
         final String username = "tytoapache@gmail.com";
-        final String password = "cquzsqalpflvswxa"; // App password de Gmail
+        final String password = "cquzsqalpflvswxa";
 
         this.session = Session.getInstance(props, new Authenticator() {
             @Override

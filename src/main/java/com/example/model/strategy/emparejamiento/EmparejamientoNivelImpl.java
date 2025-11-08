@@ -42,7 +42,6 @@ public class EmparejamientoNivelImpl implements IEmparejamientoEstrategia {
             if (max != null && valorDeNivel != null) {
                 ok &= valorDeNivel <= max.getValor();
             }
-            // Si jugador no tiene nivel y el partido exige min/max, no lo incluimos
             if (valorDeNivel == null && (min != null || max != null)) ok = false;
             if (ok) out.add(partido);
         }

@@ -1,25 +1,17 @@
 package com.example.view;
 
 import com.example.model.entity.*;
-// import com.example.model.strategy.emparejamiento.EmparejamientoHistorialImpl;
-// import com.example.model.strategy.emparejamiento.EmparejamientoNivelImpl;
 import com.example.model.strategy.emparejamiento.EmparejamientoHistorialImpl;
 import com.example.model.strategy.emparejamiento.EmparejamientoNivelImpl;
 import com.example.model.strategy.emparejamiento.EmparejamientoZonaNivelCustomImpl;
 import com.example.model.strategy.emparejamiento.GestorEmparejamiento;
-// import com.example.model.strategy.tipoNivel.Avanzado;
 import com.example.model.strategy.tipoDeporte.tipoNivel.ITipoDeporte;
 import com.example.model.strategy.tipoNivel.Avanzado;
 import com.example.model.strategy.tipoNivel.Intermedio;
 import com.example.model.strategy.tipoNivel.ITipoNivel;
-// import com.example.model.strategy.tipoNivel.Principiante;
 import com.example.model.strategy.tipoNivel.Principiante;
 import com.example.notification.service.NotificationService;
-// import com.example.notification.strategy.EmailNotificationStrategy;
 import com.example.notification.strategy.NotificationStrategy;
-// import com.example.notification.strategy.PushNotificationStrategy;
-// import com.example.notification.adapter.JavaMailEmailClientAdapter;
-// import com.example.notification.adapter.FirebasePushClientAdapter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,9 +45,6 @@ public class MenuView extends View {
     public MenuView() {
         super(new Scanner(System.in));
         sesion = Sesion.getInstance();
-        // NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
-        // NotificationStrategy push = new PushNotificationStrategy(new FirebasePushClientAdapter());
-        // this.notificationService = new NotificationService(email, push);
         this.notificationService = new NotificationService(null, null);
         this.gestor = GestorEmparejamiento.getInstance();
     }
@@ -122,27 +111,21 @@ public class MenuView extends View {
         int jugadoresRequeridos = leerOpciones("Cantidad de jugadores requeridos (2 a 15): ", 2, 15);
         Partido partido = gestor.crearPartido(usuarioActual, deporte, jugadoresRequeridos);
 
-        // Solicitar fecha
         LocalDate fecha = leerFecha();
 
-        // Solicitar horario
         LocalTime hora = leerHora();
 
-        // Combinar fecha y hora
         LocalDateTime horario = LocalDateTime.of(fecha, hora);
         partido.setHorario(horario);
 
-        // Solicitar ubicación (dirección/lugar específico)
         String ubicacionStr = leerLinea("Ubicación del encuentro (ej. Estadio Luna Park, Calle 123): ");
 
-        // Solicitar zona
         String zoneName = leerLinea("Zona del encuentro (ej. Norte, Sur, Centro): ");
 
         Zona zona = new Zona(zoneName);
         zona.setUbicacion(ubicacionStr);
         partido.setUbicacion(zona);
 
-        // Preguntar si desea configurar niveles
         String deseaConfig = leerLinea("¿Desea configurar el nivel? (s/n): ");
         if (deseaConfig.equalsIgnoreCase("s") || deseaConfig.equalsIgnoreCase("si") || deseaConfig.equalsIgnoreCase("sí")) {
             System.out.println("Configuración de niveles. Ingrese un valor entre 1 (Principiante) y 3 (Avanzado) o 0 para omitir.");
@@ -153,11 +136,9 @@ public class MenuView extends View {
             int maxVal = leerEntero();
             if (maxVal > 0) partido.setMaxNivel(crearNivelDesdeValor(maxVal));
         }
-        // Suscribir a notificaciones para que los participantes reciban avisos de cambios
         partido.addObserver(notificationService);
         System.out.println("Partido creado correctamente. Tú estás registrado como jugador (1/" + jugadoresRequeridos + ").");
         
-        // Disparar evento de creación para enviar notificaciones
         partido.publicarCreacion();
     }
 
@@ -178,7 +159,6 @@ public class MenuView extends View {
         String op = scanner.next().trim();
         switch (op) {
             case "1" -> {
-                // Obtener zonas únicas de los partidos disponibles
                 List<Partido> todosPartidos = gestor.getPartidos();
                 List<String> zonasDisponibles = new ArrayList<>();
                 for (Partido p : todosPartidos) {
@@ -195,7 +175,6 @@ public class MenuView extends View {
                     return;
                 }
 
-                // Mostrar zonas disponibles
                 System.out.println("\nZonas disponibles:");
                 for (int i = 0; i < zonasDisponibles.size(); i++) {
                     System.out.println((i + 1) + ". " + zonasDisponibles.get(i));
@@ -224,18 +203,14 @@ public class MenuView extends View {
         }
         List<Partido> encontrados = gestor.buscarPartidosPara(usuarioActual);
 
-        // Filtrar partidos creados por el usuario actual, partidos a los que ya se unió, y partidos armados
         List<Partido> partidosFiltrados = new ArrayList<>();
         for (Partido p : encontrados) {
-            // Excluir si es el organizador
             if (p.getOrganizador() != null && p.getOrganizador().equals(usuarioActual)) {
                 continue;
             }
-            // Excluir si ya está en la lista de jugadores
             if (p.getJugadores() != null && p.getJugadores().contains(usuarioActual)) {
                 continue;
             }
-            // Excluir si el partido está en estado "PartidoArmado"
             if (p.getEstado() != null && "PartidoArmado".equals(p.getEstado().getNombreEstado())) {
                 continue;
             }
@@ -252,7 +227,6 @@ public class MenuView extends View {
             System.out.println(idx++ + ". " + descripcionPartido(p));
         }
 
-        // Preguntar si desea unirse a alguno con validación
         System.out.println("\n¿Desea unirse a alguno de estos partidos?");
         int opcionUnirse;
         while (true) {
@@ -262,19 +236,17 @@ public class MenuView extends View {
                 return;
             }
             if (opcionUnirse > 0 && opcionUnirse <= partidosFiltrados.size()) {
-                break; // Opción válida
+                break;
             }
             System.out.println("Opción inválida. Seleccione un partido de la lista o 0 para volver al menú principal.");
         }
         Partido elegido = partidosFiltrados.get(opcionUnirse - 1);
 
-        // Validar que no sea su propio partido
         if (elegido.getOrganizador() != null && elegido.getOrganizador().equals(usuarioActual)) {
             System.out.println("No puedes unirte a tu propio partido. Ya estás registrado como organizador.");
             return;
         }
 
-        // Validar que no esté ya anotado
         if (elegido.getJugadores() != null && elegido.getJugadores().contains(usuarioActual)) {
             System.out.println("Ya estás anotado en este partido.");
             return;
@@ -400,7 +372,7 @@ public class MenuView extends View {
         usuarioActual.agregarDeporte(vistaAgregarHabilidad.getHabilidad());
     }
 
-    // Utilidades
+
     private boolean verificarSesion() {
         if (usuarioActual == null) {
             System.out.println("Debe iniciar sesión para realizar esta acción.");

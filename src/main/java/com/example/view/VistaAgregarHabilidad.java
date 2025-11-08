@@ -57,7 +57,6 @@ public class VistaAgregarHabilidad extends View {
                     break;
                 }
             } catch (NumberFormatException e) {
-                // ignore
             }
             System.out.println("Entrada inválida. Debe ser 1, 2 o 3.");
         }

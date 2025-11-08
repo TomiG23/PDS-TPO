@@ -14,7 +14,6 @@ public class RegistrarUsuario extends View {
 
     public void mostarRegistro() {
         System.out.println("\n--- Registro de usuario ---");
-        // Validar nombre (no vacío)
         String nombre;
         while (true) {
             System.out.print("Nombre (o presione 0 para salir): ");
@@ -30,7 +29,6 @@ public class RegistrarUsuario extends View {
             break;
         }
 
-        // Validar email (no vacío y no ocupado)
         String email;
         while (true) {
             System.out.print("Correo electrónico (o presione 0 para salir): ");
@@ -51,7 +49,6 @@ public class RegistrarUsuario extends View {
             break;
         }
 
-        // Validar contraseña (no vacía y al menos 3 caracteres)
         String password;
         while (true) {
             System.out.print("Contraseña (mínimo 3 caracteres, o presione 0 para salir): ");
@@ -71,7 +68,6 @@ public class RegistrarUsuario extends View {
             break;
         }
 
-        // Validar opción de deporte favorito (solo s o n)
         String tieneFavorito;
         while (true) {
             System.out.print("¿Desea agregar su deporte favorito? (s/n, o presione 0 para salir): ");

@@ -33,7 +33,6 @@ public class Historial {
      * única instancia del historial.
      */
     private Historial() {
-        // ocultar constructor
     }
 
     /**
@@ -55,11 +54,9 @@ public class Historial {
      */
     public void registrarPartido(Partido partido) {
         if (partido == null) return;
-        // Construir lista de participantes: organizador + jugadores
         List<Jugador> participantes = new ArrayList<>();
         if (partido.getOrganizador() != null) participantes.add(partido.getOrganizador());
         if (partido.getJugadores() != null) participantes.addAll(partido.getJugadores());
-        // Para cada jugador, registrar a los demás como conocidos
         for (Jugador j : participantes) {
             if (j == null) continue;
             conocidosPorJugador.putIfAbsent(j, new HashSet<>());

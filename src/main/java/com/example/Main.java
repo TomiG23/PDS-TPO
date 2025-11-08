@@ -21,7 +21,6 @@ public class Main{
     public static void main(String[] args) {
         Sesion sesion = Sesion.getInstance();
 
-        // Crear algunos usuarios
         Deporte futbol = new Deporte(new Futbol());
         Deporte basket = new Deporte(new Basket());
         Deporte voley = new Deporte(new Voley());
@@ -41,31 +40,11 @@ public class Main{
         sesion.registrar(bruno);
         sesion.registrar(caro);
 
-        // Configurar estrategias y adaptadores
         NotificationStrategy email = new EmailNotificationStrategy(new JavaMailEmailClientAdapter());
         NotificationStrategy push = new PushNotificationStrategy(new FirebasePushClientAdapter());
         NotificationService notificationService = new NotificationService(email, push);
 
-        // Crear partido de Futbol requiriendo 2 jugadores
         Partido partido = new Partido(ana, futbol, 2, zonaNorte);
-
-        //demo filtros
-        // partido intermedio avanzado en Futbol zona norte - 2/5
-        // partido principiante avanzado de Futbol zona sur - 1/9
-
-        // demo cambio de estado
-        // partido principiante avanzado de Cualquier deporte zona norte - 3/4
-
-        // Obtener la instancia del gestor de emparejamientos (Singleton)
-//        com.example.model.strategy.emparejamiento.GestorEmparejamiento gestor =
-//                com.example.model.strategy.emparejamiento.GestorEmparejamiento.getInstance();
-//        // Aplicar estrategia por historial para Lucas (ha jugado con Maria)
-//        gestor.setEstrategia(new com.example.model.strategy.emparejamiento.EmparejamientoHistorialImpl());
-//        List<Partido> matchesHistorial = gestor.buscarPartidosPara(lucas);
-//        System.out.println("\n-- Partidos sugeridos por historial para Lucas (conocidos) --");
-//        for (Partido p : matchesHistorial) {
-//            System.out.println("Partido organizado por " + p.getOrganizador().getNombre());
-//        }
 
         MenuView menu = new MenuView(notificationService);
         menu.run();

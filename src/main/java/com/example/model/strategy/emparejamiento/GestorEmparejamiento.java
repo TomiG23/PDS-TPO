@@ -47,7 +47,6 @@ public class GestorEmparejamiento {
      * {@link #getInstance()} para obtener el gestor.
      */
     private GestorEmparejamiento() {
-        // ocultar constructor
     }
 
     /**

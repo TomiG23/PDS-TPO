@@ -41,7 +41,6 @@ public class NotificationService implements INotificationObserver {
         List<Jugador> result = new ArrayList<>();
         
         if (PartidoEvents.PARTIDO_CREADO.equals(eventName)) {
-            // Notificar a usuarios cuyo deporte favorito coincide
             Deporte dep = partido.getDeporte();
             String nombreDep = dep != null ? dep.getNombre() : null;
             if (sesion != null && nombreDep != null) {
@@ -53,7 +52,6 @@ public class NotificationService implements INotificationObserver {
                 }
             }
         } else {
-            // Para todos los demás eventos: notificar a organizador + jugadores del partido
             Set<Jugador> set = new HashSet<>();
             if (partido.getOrganizador() != null) set.add(partido.getOrganizador());
             if (partido.getJugadores() != null) set.addAll(partido.getJugadores());

@@ -18,7 +18,6 @@ public class MenuCrearPartido extends View {
         String fecha = scanner.next();
         System.out.print("Ingrese la zona del encuentro: ");
         String zona = scanner.next();
-        // todo crear partido
         System.out.println("partido creado");
     }
 }

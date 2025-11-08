@@ -34,10 +34,9 @@ public class EmparejamientoZonaNivelCustomImpl implements IEmparejamientoEstrate
         List<Habilidad> deportesJugador = jugador.getDeportes();
         Integer valorDeNivel;
         for (Partido p : partidos) {
-            // Verificar zona
             String zonaPartido = p.getUbicacion() != null ? p.getUbicacion().getNombre() : null;
             if (!Objects.equals(zonaBuscada, zonaPartido)) {
-                continue; // No es de la zona buscada, saltar
+                continue;
             }
             
             Deporte partidoDeporte = p.getDeporte();
@@ -50,7 +49,6 @@ public class EmparejamientoZonaNivelCustomImpl implements IEmparejamientoEstrate
                 valorDeNivel = new Principiante().getValor();
             }
             
-            // Verificar nivel
             ITipoNivel min = p.getMinNivel();
             ITipoNivel max = p.getMaxNivel();
             boolean nivelOk = true;
@@ -61,7 +59,6 @@ public class EmparejamientoZonaNivelCustomImpl implements IEmparejamientoEstrate
             if (max != null && valorDeNivel != null) {
                 nivelOk &= valorDeNivel <= max.getValor();
             }
-            // Si jugador no tiene nivel y el partido exige min/max, no lo incluimos
             if (valorDeNivel == null && (min != null || max != null)) {
                 nivelOk = false;
             }

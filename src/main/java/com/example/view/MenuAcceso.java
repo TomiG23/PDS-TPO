@@ -14,7 +14,6 @@ public class MenuAcceso extends View {
         mostrarOpcipnes(List.of("Salir", "Registrarse", "Ingresar"));
         String opcion = seleccionarOpcion();
         if (opcion == null || opcion.isEmpty()) {
-            // Evitar mensaje de opción inválida por líneas vacías residuales
             return;
         }
         switch (opcion) {
